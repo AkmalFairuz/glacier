@@ -9,7 +9,9 @@
   screen sharing, direct messages (with calls), and roles and permissions.
 </p>
 
-![Glacier: a server's #general channel with the channel list and member list](docs/screenshot.webp)
+<p align="center">
+  <img src="docs/screenshot.webp" width="85%" alt="Glacier: a server's #general channel with the channel list and member list">
+</p>
 
 - **Backend**: Rust (axum, sqlx with raw SQL, no ORM), MariaDB primary + read replica, Redis, MinIO
 - **Frontend**: Vite + React + TypeScript
