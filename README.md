@@ -21,7 +21,7 @@
 ## Architecture
 
 <p align="center">
-  <img src="docs/architecture.svg" width="90%" alt="Glacier containers: the browser reaches nginx through the only published port, 8080:80; nginx, three backend replicas, Redis, MariaDB primary and replica, and MinIO share the glacier_default bridge network, and the data containers keep their state in four named volumes.">
+  <img src="docs/architecture.svg" width="90%" alt="Glacier containers on the glacier-net bridge network: the browser reaches nginx on port 8080 (Grafana on 3001, Adminer on 8082 with the tools profile); nginx balances three backend replicas that use Redis, a MariaDB primary and replica, and MinIO; Prometheus scrapes the services and exporters; named volumes hold the data.">
 </p>
 
 ## Run everything
