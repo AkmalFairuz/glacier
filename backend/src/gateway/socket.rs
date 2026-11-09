@@ -155,6 +155,7 @@ async fn run(state: AppState, user: Id, socket: WebSocket) {
     let conn = state
         .hub
         .register(user, server_ids.iter().copied().collect::<HashSet<_>>(), tx);
+    metrics::counter!("glacier_gateway_connections_total").increment(1);
     let server_ids = match session.ready().await {
         Ok(ids) => ids,
         Err(e) => {

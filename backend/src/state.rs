@@ -2,6 +2,7 @@ use std::ops::Deref;
 use std::sync::Arc;
 
 use aws_sdk_s3::config::{BehaviorVersion, Credentials, Region};
+use metrics_exporter_prometheus::PrometheusHandle;
 use redis::aio::ConnectionManager;
 
 use crate::config::Config;
@@ -22,6 +23,7 @@ pub struct Inner {
     pub stun_urls: Vec<String>,
     pub ids: Snowflake,
     pub hub: Hub,
+    pub metrics: PrometheusHandle,
 }
 
 impl Deref for AppState {
@@ -35,6 +37,7 @@ type BoxError = Box<dyn std::error::Error + Send + Sync>;
 
 impl AppState {
     pub async fn build(config: &Config) -> Result<Self, BoxError> {
+        let metrics = crate::metrics::install()?;
         let db = Db::connect(&config.database_url, config.database_read_url.as_deref()).await?;
         let redis_client = redis::Client::open(config.redis_url.as_str())?;
         let mut redis = ConnectionManager::new(redis_client.clone()).await?;
@@ -59,6 +62,7 @@ impl AppState {
             stun_urls: config.stun_urls.clone(),
             ids,
             hub: Hub::default(),
+            metrics,
         })))
     }
 

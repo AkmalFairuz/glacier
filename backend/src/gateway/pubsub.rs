@@ -24,8 +24,9 @@ pub async fn publish(state: &AppState, target: Target, event: Event) {
         return;
     };
     let result: redis::RedisResult<()> = state.redis().publish(CHANNEL, payload).await;
-    if let Err(e) = result {
-        tracing::warn!(error = %e, "publish failed");
+    match result {
+        Ok(()) => metrics::counter!("glacier_events_published_total").increment(1),
+        Err(e) => tracing::warn!(error = %e, "publish failed"),
     }
 }
 
@@ -68,6 +69,7 @@ async fn run(state: &AppState) -> redis::RedisResult<()> {
     let mut stream = pubsub.on_message();
     while let Some(msg) = stream.next().await {
         let payload: String = msg.get_payload()?;
+        metrics::counter!("glacier_events_received_total").increment(1);
         match serde_json::from_str::<Envelope>(&payload) {
             Ok(env) => state.hub.dispatch(&env),
             Err(e) => tracing::warn!(error = %e, "bad envelope"),

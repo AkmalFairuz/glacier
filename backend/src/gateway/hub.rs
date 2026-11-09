@@ -35,6 +35,11 @@ impl Hub {
         self.conns.write().expect("hub lock").remove(&conn);
     }
 
+    /// Open connections on this replica.
+    pub fn len(&self) -> usize {
+        self.conns.read().expect("hub lock").len()
+    }
+
     /// Deliver an envelope from the bus to matching local sockets.
     pub fn dispatch(&self, env: &Envelope) {
         self.track_membership(env);
@@ -43,6 +48,7 @@ impl Hub {
         };
         let frame: Arc<str> = frame.into();
         let conns = self.conns.read().expect("hub lock");
+        let mut sent = 0;
         for conn in conns.values() {
             let matches = match &env.target {
                 Target::Server(s) => conn.servers.contains(s),
@@ -51,10 +57,11 @@ impl Hub {
                 Target::Users(list) => list.contains(&conn.user),
                 Target::Channel { .. } => false,
             };
-            if matches {
-                let _ = conn.tx.send(frame.clone());
+            if matches && conn.tx.send(frame.clone()).is_ok() {
+                sent += 1;
             }
         }
+        metrics::counter!("glacier_frames_sent_total").increment(sent);
     }
 
     /// Keep each connection's server set in sync with join/leave events.

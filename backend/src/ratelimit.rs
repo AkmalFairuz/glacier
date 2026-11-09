@@ -17,6 +17,7 @@ pub async fn check(state: &AppState, scope: &str, subject: &str, limit: u64, win
         let _: () = redis.expire(&key, window_secs as i64).await?;
     }
     if count > limit {
+        metrics::counter!("glacier_rate_limited_total", "scope" => scope.to_string()).increment(1);
         return Err(AppError::RateLimited);
     }
     Ok(())

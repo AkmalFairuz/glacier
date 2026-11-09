@@ -10,6 +10,7 @@ mod id;
 mod invites;
 mod members;
 mod messages;
+mod metrics;
 mod openapi;
 mod permissions;
 mod ratelimit;
