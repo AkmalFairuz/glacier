@@ -41,35 +41,10 @@ for running on the host.
 
 ## Metrics
 
-Each replica serves Prometheus metrics at `GET /metrics` (port 3000). nginx doesn't proxy this
-path, so it's reachable only inside the Docker network (`http://backend:3000/metrics`), not from
-the host. Docker Compose already runs Prometheus and Grafana for it (see Monitoring in the root
-README). To scrape every replica from your own Prometheus, let it resolve the service name:
-
-```yaml
-scrape_configs:
-  - job_name: glacier
-    dns_sd_configs:
-      - names: [backend]
-        type: A
-        port: 3000
-```
-
-| Metric                                  | Type      | Labels                           |
-| --------------------------------------- | --------- | -------------------------------- |
-| `glacier_http_requests_total`           | counter   | `method`, `route`, `status`      |
-| `glacier_http_request_duration_seconds` | histogram | `method`, `route`, `status`      |
-| `glacier_gateway_connections`           | gauge     |                                  |
-| `glacier_gateway_connections_total`     | counter   |                                  |
-| `glacier_events_published_total`        | counter   |                                  |
-| `glacier_events_received_total`         | counter   |                                  |
-| `glacier_frames_sent_total`             | counter   |                                  |
-| `glacier_rate_limited_total`            | counter   | `scope`                          |
-| `glacier_db_pool_connections`           | gauge     | `pool`, `state`                  |
-| `process_*`                             | various   | CPU, memory, open files, threads |
-
-`route` is the route template (`/api/channels/{id}/messages`), not the raw path, so ids don't
-create a new series per resource.
+Each replica serves Prometheus metrics at `GET /metrics` on port 3000 (internal only; nginx doesn't
+proxy it). They cover HTTP requests and latency per route template, gateway connections and
+events, rate limiting, database pool usage and process stats, all prefixed `glacier_` or
+`process_`. Compose scrapes them already (see Monitoring in the root README).
 
 ## Checks
 
