@@ -1,0 +1,35 @@
+groups:
+  - name: host
+    rules:
+      - alert: HostHighCpu
+        expr: 100 * (1 - avg(rate(node_cpu_seconds_total{mode="idle"}[5m]))) > 90
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Host CPU usage is above 90%"
+
+      - alert: HostLowMemory
+        expr: node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes < 0.10
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Less than 10% of host memory is available"
+
+      - alert: HostDiskAlmostFull
+        expr: |
+          node_filesystem_avail_bytes{fstype!~"tmpfs|overlay|squashfs"}
+            / node_filesystem_size_bytes{fstype!~"tmpfs|overlay|squashfs"} < 0.10
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Filesystem {{ $labels.mountpoint }} has less than 10% free space"
+
+      - alert: ContainerOutOfMemory
+        expr: increase(container_oom_events_total{service!=""}[10m]) > 0
+        labels:
+          severity: warning
+        annotations:
+          summary: "Container {{ $labels.name }} was killed for running out of memory"
