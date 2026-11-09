@@ -8,6 +8,7 @@ required:
 - owner_id
 - parent_id
 - position
+- rate_limit_per_user
 - recipients
 - server_id
 - topic
@@ -40,6 +41,13 @@ properties:
   position:
     type: integer
     format: int32
+  rate_limit_per_user:
+    type: integer
+    format: int32
+    description: |-
+      Slowmode: seconds a member must wait between messages; 0 is off. Members with
+      Manage Messages or Manage Channels are exempt.
+    minimum: 0
   recipients:
     type: array
     items:

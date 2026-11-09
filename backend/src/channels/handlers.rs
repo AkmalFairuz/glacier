@@ -10,6 +10,9 @@ use crate::id::Id;
 use crate::permissions::{self, bits, PermContext, TargetType};
 use crate::state::AppState;
 
+/// Six hours, the longest slowmode.
+const MAX_SLOWMODE_SECS: u32 = 21_600;
+
 use super::models::{Channel, ChannelPosition, ChannelRow, ChannelType, CreateChannel, PutOverwrite, UpdateChannel};
 use super::repo;
 
@@ -140,6 +143,15 @@ pub async fn update(
             return Err(AppError::bad("user limit must be between 1 and 100"));
         }
         row.user_limit = limit;
+    }
+    if let Some(seconds) = body.rate_limit_per_user {
+        if row.kind != ChannelType::Text {
+            return Err(AppError::bad("only text channels have slowmode"));
+        }
+        if seconds > MAX_SLOWMODE_SECS {
+            return Err(AppError::bad("slowmode must be between 0 and 21600 seconds"));
+        }
+        row.rate_limit_per_user = seconds;
     }
     repo::update(&state, &row).await?;
     Ok(Json(broadcast(&state, server, id, "CHANNEL_UPDATE").await?))

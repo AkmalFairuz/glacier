@@ -61,6 +61,8 @@ export function ChannelPage() {
             canSend={can(perms, Perm.SEND_MESSAGES)}
             canAttach={can(perms, Perm.ATTACH_FILES)}
             perms={{ canReact: can(perms, Perm.ADD_REACTIONS), canManage: can(perms, Perm.MANAGE_MESSAGES), canSend: can(perms, Perm.SEND_MESSAGES) }}
+            slowmode={channel.rate_limit_per_user}
+            slowmodeExempt={can(perms, Perm.MANAGE_MESSAGES) || can(perms, Perm.MANAGE_CHANNELS)}
           />
         )}
         {searching ? <SearchPanel /> : !isVoice && membersOpen && serverId && <MemberList serverId={serverId} />}

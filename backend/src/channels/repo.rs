@@ -9,7 +9,7 @@ use crate::state::AppState;
 use super::models::{ChannelRow, ChannelType};
 
 pub const COLUMNS: &str =
-    "id, server_id, type, name, topic, parent_id, position, user_limit, owner_id, last_message_id";
+    "id, server_id, type, name, topic, parent_id, position, user_limit, rate_limit_per_user, owner_id, last_message_id";
 
 fn key(id: Id) -> String {
     format!("glacier:channel:{id}")
@@ -79,12 +79,15 @@ pub async fn create(
 }
 
 pub async fn update(state: &AppState, row: &ChannelRow) -> AppResult<()> {
-    sqlx::query("UPDATE channels SET name = ?, topic = ?, parent_id = ?, position = ?, user_limit = ? WHERE id = ?")
-        .bind(&row.name)
-        .bind(&row.topic)
-        .bind(row.parent_id)
-        .bind(row.position)
-        .bind(row.user_limit)
+    sqlx::query(
+        "UPDATE channels SET name = ?, topic = ?, parent_id = ?, position = ?, user_limit = ?, rate_limit_per_user = ? WHERE id = ?",
+    )
+    .bind(&row.name)
+    .bind(&row.topic)
+    .bind(row.parent_id)
+    .bind(row.position)
+    .bind(row.user_limit)
+    .bind(row.rate_limit_per_user)
         .bind(row.id)
         .execute(&state.db.writer)
         .await?;

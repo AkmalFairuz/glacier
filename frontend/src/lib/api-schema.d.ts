@@ -706,6 +706,12 @@ export interface components {
             parent_id: null | components["schemas"]["Id"];
             /** Format: int32 */
             position: number;
+            /**
+             * Format: int32
+             * @description Slowmode: seconds a member must wait between messages; 0 is off. Members with
+             *     Manage Messages or Manage Channels are exempt.
+             */
+            rate_limit_per_user: number;
             /** @description All participants (including the caller) for DMs; empty for server channels. */
             recipients: components["schemas"]["User"][];
             server_id: null | components["schemas"]["Id"];
@@ -771,9 +777,14 @@ export interface components {
             error: components["schemas"]["ErrorDetail"];
         };
         ErrorDetail: {
-            /** @description bad_request, unauthorized, forbidden, not_found, conflict, rate_limited, payload_too_large, internal */
+            /** @description bad_request, unauthorized, forbidden, not_found, conflict, rate_limited, slowmode, payload_too_large, internal */
             code: string;
             message: string;
+            /**
+             * Format: int64
+             * @description Seconds to wait before retrying (slowmode only).
+             */
+            retry_after: number | null;
         };
         IceConfig: {
             ice_servers: components["schemas"]["IceServer"][];
@@ -926,6 +937,11 @@ export interface components {
             parent_id?: null | components["schemas"]["Id"];
             /** Format: int32 */
             position?: number | null;
+            /**
+             * Format: int32
+             * @description Text channels: slowmode in seconds, 0 (off) to 21600 (6 hours).
+             */
+            rate_limit_per_user?: number | null;
             topic?: string | null;
             /**
              * Format: int32

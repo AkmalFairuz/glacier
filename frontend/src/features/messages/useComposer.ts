@@ -1,14 +1,16 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useRef, useState } from 'react'
-import { errorMessage } from '../../lib/api'
+import { ApiError, errorMessage } from '../../lib/api'
 import { messagesApi } from './api'
 import type { PendingUpload } from './AttachmentPicker'
 import { addMessage } from './cache'
 import { reply, useReply } from './replyStore'
+import { cooldowns, useCooldown } from './slowmode'
 
 const TYPING_THROTTLE_MS = 8000
 
-export function useComposer(channelId: string) {
+/** `slowmode`: seconds this member must wait between messages here (0 when off or exempt). */
+export function useComposer(channelId: string, slowmode = 0) {
   const qc = useQueryClient()
   const [text, setText] = useState('')
   const [uploads, setUploads] = useState<PendingUpload[]>([])
@@ -52,12 +54,18 @@ export function useComposer(channelId: string) {
       setUploads([])
       reply.cancel(channelId)
       lastTyping.current = 0
+      if (slowmode > 0) cooldowns.start(channelId, slowmode)
+    },
+    onError: (error) => {
+      // Another tab sent first, or the page was reloaded mid-wait: show the server's countdown.
+      if (error instanceof ApiError && error.code === 'slowmode') cooldowns.start(channelId, error.retryAfter ?? slowmode)
     },
   })
+  const wait = useCooldown(channelId)
 
   const uploading = uploads.some((u) => !u.attachment && !u.error)
   const ready = uploads.some((u) => u.attachment)
-  const canSubmit = !uploading && !send.isPending && (text.trim().length > 0 || ready)
+  const canSubmit = !uploading && !send.isPending && wait === 0 && (text.trim().length > 0 || ready)
 
-  return { text, onTextChange, setText, uploads, addFiles, removeUpload, send, canSubmit }
+  return { text, onTextChange, setText, uploads, addFiles, removeUpload, send, canSubmit, wait }
 }

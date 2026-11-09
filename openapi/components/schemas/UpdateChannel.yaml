@@ -14,6 +14,13 @@ properties:
     - integer
     - 'null'
     format: int32
+  rate_limit_per_user:
+    type:
+    - integer
+    - 'null'
+    format: int32
+    description: 'Text channels: slowmode in seconds, 0 (off) to 21600 (6 hours).'
+    minimum: 0
   topic:
     type:
     - string

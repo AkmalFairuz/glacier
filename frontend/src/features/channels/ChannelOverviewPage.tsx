@@ -5,12 +5,14 @@ import type { Channel } from '../../lib/types'
 import { Button } from '../../ui/Button'
 import { Field } from '../../ui/Field'
 import { Input } from '../../ui/Input'
+import { Select } from '../../ui/Select'
 import { Slider } from '../../ui/Slider'
 import { TextArea } from '../../ui/TextArea'
 import { Toggle } from '../../ui/Toggle'
 import { toast } from '../../ui/toast'
 import { channelsApi } from './api'
 import { upsertChannel } from './cache'
+import { describeInterval, SLOWMODE_OPTIONS } from '../messages/slowmode'
 import s from './ChannelSettingsPages.module.css'
 
 const TOPIC_MAX = 1024
@@ -20,13 +22,18 @@ export function ChannelOverviewPage({ channel }: { channel: Channel }) {
   const [name, setName] = useState(channel.name ?? '')
   const [topic, setTopic] = useState(channel.topic ?? '')
   const [limit, setLimit] = useState<number | null>(channel.user_limit ?? null)
-  const dirty = name.trim() !== (channel.name ?? '') || topic.trim() !== (channel.topic ?? '') || limit !== (channel.user_limit ?? null)
+  const [slowmode, setSlowmode] = useState(channel.rate_limit_per_user)
+  const dirty =
+    name.trim() !== (channel.name ?? '') ||
+    topic.trim() !== (channel.topic ?? '') ||
+    limit !== (channel.user_limit ?? null) ||
+    slowmode !== channel.rate_limit_per_user
   const save = useMutation({
     meta: { inlineError: true },
     mutationFn: () =>
       channelsApi.update(channel.id, {
         name: name.trim(),
-        ...(channel.type === 'text' && { topic: topic.trim() || null }),
+        ...(channel.type === 'text' && { topic: topic.trim() || null, rate_limit_per_user: slowmode }),
         ...(channel.type === 'voice' && { user_limit: limit }),
       }),
     onSuccess: (updated) => {
@@ -34,6 +41,7 @@ export function ChannelOverviewPage({ channel }: { channel: Channel }) {
       setName(updated.name ?? '')
       setTopic(updated.topic ?? '')
       setLimit(updated.user_limit ?? null)
+      setSlowmode(updated.rate_limit_per_user)
       toast.success('Channel saved')
     },
   })
@@ -58,6 +66,17 @@ export function ChannelOverviewPage({ channel }: { channel: Channel }) {
           </span>
         </div>
       )}
+      {channel.type === 'text' && (
+        <Field label="Slowmode">
+          <Select
+            value={String(slowmode)}
+            onChange={(v) => setSlowmode(Number(v))}
+            options={[...new Set([...SLOWMODE_OPTIONS, slowmode])]
+              .sort((a, b) => a - b)
+              .map((v) => ({ value: String(v), label: v === 0 ? 'Off' : describeInterval(v) }))}
+          />
+        </Field>
+      )}
       {channel.type === 'voice' && (
         <div className={s.limit}>
           <Toggle label="Limit users" checked={limit !== null} onChange={(on) => setLimit(on ? 10 : null)} />
@@ -76,6 +95,7 @@ export function ChannelOverviewPage({ channel }: { channel: Channel }) {
               setName(channel.name ?? '')
               setTopic(channel.topic ?? '')
               setLimit(channel.user_limit ?? null)
+              setSlowmode(channel.rate_limit_per_user)
             }}
           >
             Reset

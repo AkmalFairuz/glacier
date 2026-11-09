@@ -3,9 +3,17 @@ type: object
 required:
 - code
 - message
+- retry_after
 properties:
   code:
     type: string
-    description: bad_request, unauthorized, forbidden, not_found, conflict, rate_limited, payload_too_large, internal
+    description: bad_request, unauthorized, forbidden, not_found, conflict, rate_limited, slowmode, payload_too_large, internal
   message:
     type: string
+  retry_after:
+    type:
+    - integer
+    - 'null'
+    format: int64
+    description: Seconds to wait before retrying (slowmode only).
+    minimum: 0

@@ -33,11 +33,14 @@ export const tokenStore = {
 export class ApiError extends Error {
   readonly status: number
   readonly code: string
+  /** Seconds to wait, for slowmode errors. */
+  readonly retryAfter: number | null
 
-  constructor(status: number, code: string, message: string) {
+  constructor(status: number, code: string, message: string, retryAfter: number | null = null) {
     super(message)
     this.status = status
     this.code = code
+    this.retryAfter = retryAfter
   }
 }
 
@@ -58,10 +61,12 @@ const auth: Middleware = {
     const body = (await response
       .clone()
       .json()
-      .catch(() => null)) as { error?: { code?: string; message?: string } } | null
+      .catch(() => null)) as { error?: { code?: string; message?: string; retry_after?: number } } | null
+    const code = body?.error?.code ?? 'internal'
     if (response.status === 401 && request.headers.has('Authorization')) unauthorizedHandler?.()
-    if (response.status === 429) toast.error(RATE_LIMITED)
-    throw new ApiError(response.status, body?.error?.code ?? 'internal', body?.error?.message ?? response.statusText)
+    // Slowmode is shown by the composer's countdown instead.
+    if (response.status === 429 && code !== 'slowmode') toast.error(RATE_LIMITED)
+    throw new ApiError(response.status, code, body?.error?.message ?? response.statusText, body?.error?.retry_after ?? null)
   },
 }
 
@@ -82,6 +87,7 @@ export function fileBody(file: File): never {
 }
 
 export function errorMessage(error: unknown): string {
+  if (error instanceof ApiError && error.code === 'slowmode') return `Slowmode is on. You can send another message in ${error.retryAfter ?? 1} seconds.`
   if (error instanceof ApiError && error.status === 429) return RATE_LIMITED
   if (error instanceof TypeError) return 'Cannot reach Glacier. Check your connection.'
   // Server messages are lowercase sentences; show them capitalized like the rest of the UI.

@@ -67,6 +67,10 @@ pub async fn create(
             .map_err(|_| AppError::bad("the message you are replying to no longer exists"))?;
     }
     ratelimit::check(&state, "message", &auth.id.to_string(), 10, 5).await?;
+    let slowmode = access.channel.rate_limit_per_user;
+    if slowmode > 0 && !access.has(bits::MANAGE_MESSAGES) && !access.has(bits::MANAGE_CHANNELS) {
+        ratelimit::slowmode(&state, id, auth.id, slowmode).await?;
+    }
     let message_id = repo::insert(
         &state,
         repo::NewMessage {

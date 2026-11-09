@@ -40,6 +40,9 @@ pub struct ChannelRow {
     pub parent_id: Option<Id>,
     pub position: i32,
     pub user_limit: Option<u16>,
+    /// Defaulted so channel rows cached in Redis before this column existed still load.
+    #[serde(default)]
+    pub rate_limit_per_user: u32,
     pub owner_id: Option<Id>,
     pub last_message_id: Option<Id>,
 }
@@ -56,6 +59,9 @@ pub struct Channel {
     pub position: i32,
     /// Voice channels only: most people allowed at once (1-100), or null for no limit.
     pub user_limit: Option<u16>,
+    /// Slowmode: seconds a member must wait between messages; 0 is off. Members with
+    /// Manage Messages or Manage Channels are exempt.
+    pub rate_limit_per_user: u32,
     /// Empty for DMs.
     pub overwrites: Vec<Overwrite>,
     /// All participants (including the caller) for DMs; empty for server channels.
@@ -75,6 +81,7 @@ impl Channel {
             parent_id: row.parent_id,
             position: row.position,
             user_limit: row.user_limit,
+            rate_limit_per_user: row.rate_limit_per_user,
             overwrites,
             recipients,
             owner_id: row.owner_id,
@@ -103,6 +110,8 @@ pub struct UpdateChannel {
     /// Voice channels: 1-100, or null to remove the limit.
     #[serde(default, deserialize_with = "crate::serde_util::double_option")]
     pub user_limit: Option<Option<u16>>,
+    /// Text channels: slowmode in seconds, 0 (off) to 21600 (6 hours).
+    pub rate_limit_per_user: Option<u32>,
 }
 
 #[derive(Deserialize, ToSchema)]

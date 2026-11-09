@@ -19,6 +19,9 @@ pub enum AppError {
     Conflict(String),
     #[error("too many requests")]
     RateLimited,
+    /// Slowmode: seconds until the member may send again.
+    #[error("slowmode is on; you can send another message in {0} seconds")]
+    Slowmode(u64),
     #[error("payload too large")]
     PayloadTooLarge,
     #[error("internal error: {0}")]
@@ -35,9 +38,12 @@ pub struct ErrorBody {
 
 #[derive(Serialize, ToSchema)]
 pub struct ErrorDetail {
-    /// bad_request, unauthorized, forbidden, not_found, conflict, rate_limited, payload_too_large, internal
+    /// bad_request, unauthorized, forbidden, not_found, conflict, rate_limited, slowmode, payload_too_large, internal
     pub code: String,
     pub message: String,
+    /// Seconds to wait before retrying (slowmode only).
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub retry_after: Option<u64>,
 }
 
 impl AppError {
@@ -49,6 +55,7 @@ impl AppError {
             Self::NotFound(_) => (StatusCode::NOT_FOUND, "not_found"),
             Self::Conflict(_) => (StatusCode::CONFLICT, "conflict"),
             Self::RateLimited => (StatusCode::TOO_MANY_REQUESTS, "rate_limited"),
+            Self::Slowmode(_) => (StatusCode::TOO_MANY_REQUESTS, "slowmode"),
             Self::PayloadTooLarge => (StatusCode::PAYLOAD_TOO_LARGE, "payload_too_large"),
             Self::Internal(_) => (StatusCode::INTERNAL_SERVER_ERROR, "internal"),
         }
@@ -69,7 +76,11 @@ impl IntoResponse for AppError {
             }
             other => other.to_string(),
         };
-        (status, Json(json!({ "error": { "code": code, "message": message } }))).into_response()
+        let mut error = json!({ "code": code, "message": message });
+        if let Self::Slowmode(seconds) = self {
+            error["retry_after"] = json!(seconds);
+        }
+        (status, Json(json!({ "error": error }))).into_response()
     }
 }
 

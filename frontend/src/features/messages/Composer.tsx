@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react'
-import { LuSendHorizontal, LuSmile, LuX } from 'react-icons/lu'
-import { errorMessage } from '../../lib/api'
+import { LuSendHorizontal, LuSmile, LuTimer, LuX } from 'react-icons/lu'
+import { ApiError, errorMessage } from '../../lib/api'
+import { Tooltip } from '../../ui/Tooltip'
 import { IconButton } from '../../ui/IconButton'
 import { TextArea } from '../../ui/TextArea'
 import { useMenu } from '../../ui/useMenu'
@@ -8,12 +9,22 @@ import { AttachButton, PendingUploads } from './AttachmentPicker'
 import { EmojiPicker } from '../emoji/EmojiPicker'
 import { useComposer } from './useComposer'
 import { reply, useReply } from './replyStore'
+import { describeInterval, formatWait } from './slowmode'
 import s from './Composer.module.css'
 
-type Props = { channelId: string; placeholder: string; canSend: boolean; canAttach: boolean }
+type Props = {
+  channelId: string
+  placeholder: string
+  canSend: boolean
+  canAttach: boolean
+  /** Slowmode interval in seconds (0 when off). */
+  slowmode?: number
+  /** Members with Manage Messages or Manage Channels skip the wait. */
+  slowmodeExempt?: boolean
+}
 
-export function Composer({ channelId, placeholder, canSend, canAttach }: Props) {
-  const composer = useComposer(channelId)
+export function Composer({ channelId, placeholder, canSend, canAttach, slowmode = 0, slowmodeExempt = false }: Props) {
+  const composer = useComposer(channelId, slowmodeExempt ? 0 : slowmode)
   const textarea = useRef<HTMLTextAreaElement>(null)
   const emoji = useMenu()
   const replyTo = useReply((st) => st[channelId])
@@ -77,11 +88,27 @@ export function Composer({ channelId, placeholder, canSend, canAttach }: Props) 
               if (e.key === 'Escape' && replyTo) reply.cancel(channelId)
             }}
           />
+          {slowmode > 0 && (
+            <Tooltip
+              label={
+                slowmodeExempt
+                  ? `Slowmode is on (${describeInterval(slowmode)}); you are exempt`
+                  : `Slowmode is on: one message every ${describeInterval(slowmode)}`
+              }
+            >
+              <span className={composer.wait > 0 ? `${s.slowmode} ${s.waiting}` : s.slowmode} role="timer" aria-live="off">
+                <LuTimer aria-hidden="true" />
+                {composer.wait > 0 && <span>{formatWait(composer.wait)}</span>}
+              </span>
+            </Tooltip>
+          )}
           <IconButton label="Insert emoji" icon={<LuSmile />} onClick={emoji.openBelow} />
           <IconButton type="submit" label="Send" icon={<LuSendHorizontal />} disabled={!composer.canSubmit} />
         </div>
       </div>
-      {composer.send.error && <p className={s.error}>{errorMessage(composer.send.error)}</p>}
+      {composer.send.error && !(composer.send.error instanceof ApiError && composer.send.error.code === 'slowmode') && (
+        <p className={s.error}>{errorMessage(composer.send.error)}</p>
+      )}
       <EmojiPicker anchor={emoji.anchor} onClose={emoji.close} onPick={insertEmoji} />
     </form>
   )

@@ -32,7 +32,7 @@ export function ChannelSettings({ channel, open, onClose }: Props) {
   })
 
   const items: NavItem[] = [
-    { id: 'overview', label: 'Overview', keywords: 'name topic' },
+    { id: 'overview', label: 'Overview', keywords: 'name topic slowmode user limit' },
     ...(can(perms, Perm.MANAGE_ROLES) ? [{ id: 'permissions', label: 'Permissions', keywords: 'private roles members access' }] : []),
   ]
   const current = items.find((i) => i.id === page) ?? items[0]

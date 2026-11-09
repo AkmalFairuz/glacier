@@ -12,15 +12,25 @@ type Props = {
   canSend: boolean
   canAttach: boolean
   perms: MessagePerms
+  slowmode?: number
+  slowmodeExempt?: boolean
 }
 
-export function ChatPane({ channelId, title, intro, placeholder, canSend, canAttach, perms }: Props) {
+export function ChatPane({ channelId, title, intro, placeholder, canSend, canAttach, perms, slowmode, slowmodeExempt }: Props) {
   return (
     <section className={s.pane}>
       <MessageList key={channelId} channelId={channelId} title={title} intro={intro} perms={perms} />
       <div className={s.footer}>
         <TypingIndicator channelId={channelId} />
-        <Composer key={`composer-${channelId}`} channelId={channelId} placeholder={placeholder} canSend={canSend} canAttach={canAttach} />
+        <Composer
+          key={`composer-${channelId}`}
+          channelId={channelId}
+          placeholder={placeholder}
+          canSend={canSend}
+          canAttach={canAttach}
+          slowmode={slowmode}
+          slowmodeExempt={slowmodeExempt}
+        />
       </div>
     </section>
   )
