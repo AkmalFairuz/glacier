@@ -24,6 +24,8 @@ services:
       interval: 5s
       timeout: 5s
       retries: 30
+    networks:
+      - glacier-net
 
   mariadb-replica:
     image: mariadb:11.4
@@ -50,6 +52,8 @@ services:
       interval: 5s
       timeout: 5s
       retries: 30
+    networks:
+      - glacier-net
 
   redis:
     image: redis:7.4-alpine
@@ -61,6 +65,8 @@ services:
       interval: 5s
       timeout: 3s
       retries: 20
+    networks:
+      - glacier-net
 
   minio:
     image: pgsty/minio:RELEASE.2026-08-04T00-00-00Z
@@ -77,6 +83,8 @@ services:
       interval: 5s
       timeout: 5s
       retries: 20
+    networks:
+      - glacier-net
 
   backend:
     build:
@@ -105,6 +113,8 @@ services:
       minio:
         condition: service_healthy
     restart: unless-stopped
+    networks:
+      - glacier-net
 
   nginx:
     build:
@@ -118,6 +128,8 @@ services:
       minio:
         condition: service_healthy
     restart: unless-stopped
+    networks:
+      - glacier-net
 
   # Monitoring. Prometheus and the exporters are internal; see monitoring/ for configuration.
   prometheus:
@@ -138,6 +150,8 @@ services:
       timeout: 5s
       retries: 10
     restart: unless-stopped
+    networks:
+      - glacier-net
 
   # Creates the read-only monitoring user on the primary; it reaches the replica through replication.
   mariadb-monitor-user:
@@ -152,6 +166,8 @@ services:
       mariadb-primary:
         condition: service_healthy
     restart: "no"
+    networks:
+      - glacier-net
 
   mysqld-exporter-primary:
     image: prom/mysqld-exporter:v0.21.0
@@ -162,6 +178,8 @@ services:
       mariadb-monitor-user:
         condition: service_completed_successfully
     restart: unless-stopped
+    networks:
+      - glacier-net
 
   mysqld-exporter-replica:
     image: prom/mysqld-exporter:v0.21.0
@@ -174,6 +192,8 @@ services:
       mariadb-monitor-user:
         condition: service_completed_successfully
     restart: unless-stopped
+    networks:
+      - glacier-net
 
   redis-exporter:
     image: oliver006/redis_exporter:v1.95.0
@@ -183,6 +203,8 @@ services:
       redis:
         condition: service_healthy
     restart: unless-stopped
+    networks:
+      - glacier-net
 
   nginx-exporter:
     image: nginx/nginx-prometheus-exporter:1.5.3
@@ -191,6 +213,8 @@ services:
       nginx:
         condition: service_started
     restart: unless-stopped
+    networks:
+      - glacier-net
 
   # Host metrics: CPU, memory, disk, network, load (on Docker Desktop this is the Docker VM).
   node-exporter:
@@ -207,6 +231,8 @@ services:
       - /:/rootfs:ro
     pid: host
     restart: unless-stopped
+    networks:
+      - glacier-net
 
   # Per-container CPU, memory, network and disk I/O.
   cadvisor:
@@ -226,6 +252,8 @@ services:
       - /dev/kmsg
     privileged: true
     restart: unless-stopped
+    networks:
+      - glacier-net
 
   # Dashboards at http://localhost:3001 (admin / glacier-grafana). The only monitoring port on the host.
   grafana:
@@ -252,6 +280,8 @@ services:
       timeout: 5s
       retries: 10
     restart: unless-stopped
+    networks:
+      - glacier-net
 
 volumes:
   mariadb-primary:
@@ -260,3 +290,9 @@ volumes:
   minio:
   prometheus:
   grafana:
+
+# One user-defined bridge network for every service; containers reach each other by service name.
+networks:
+  glacier-net:
+    name: glacier-net
+    driver: bridge

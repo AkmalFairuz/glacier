@@ -22,7 +22,7 @@ only one of them applies it.
 
 ## Configuration
 
-All settings come from environment variables. The defaults match `docker-compose.yaml`.
+All settings come from environment variables. The defaults match `docker-compose.yml`.
 
 | Variable              | Default                                          |
 | --------------------- | ------------------------------------------------ |

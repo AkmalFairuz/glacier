@@ -83,7 +83,7 @@ docker compose up -d mariadb-primary mariadb-replica redis minio
 ```
 
 Docker Compose doesn't publish the data service ports. For host development, add a
-`docker-compose.override.yaml` that maps them (`3306`, `6379`, `9000`), then:
+`docker-compose.override.yml` that maps them (`3306`, `6379`, `9000`), then:
 
 ```sh
 cd backend && cargo run            # http://localhost:3000, defaults match the compose credentials
