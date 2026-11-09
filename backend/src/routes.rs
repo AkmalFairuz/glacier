@@ -30,6 +30,8 @@ pub fn api() -> Router<AppState> {
 
 pub fn router(state: AppState) -> Router {
     Router::new()
+        // Same as /api/health, at the root for load balancers and uptime checks.
+        .route("/health", get(|| async { "ok" }))
         .nest("/api", api())
         .merge(gateway::router())
         .merge(metrics::router())
