@@ -20,7 +20,9 @@
 
 ## Architecture
 
-![Glacier containers: the browser reaches nginx through the only published port, 8080:80; nginx, three backend replicas, Redis, MariaDB primary and replica, and MinIO share the glacier_default bridge network, and the data containers keep their state in four named volumes.](docs/architecture.svg)
+<p align="center">
+  <img src="docs/architecture.svg" width="90%" alt="Glacier containers: the browser reaches nginx through the only published port, 8080:80; nginx, three backend replicas, Redis, MariaDB primary and replica, and MinIO share the glacier_default bridge network, and the data containers keep their state in four named volumes.">
+</p>
 
 ## Run everything
 
