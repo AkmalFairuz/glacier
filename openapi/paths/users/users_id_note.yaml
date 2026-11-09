@@ -1,0 +1,20 @@
+# Generated from the backend handlers (utoipa). Do not edit; run `cargo run -- openapi` in backend/.
+put:
+  tags:
+  - users
+  operationId: users_set_note
+  parameters:
+  - name: id
+    in: path
+    required: true
+    schema:
+      $ref: ../../components/schemas/Id.yaml
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/NoteBody.yaml
+    required: true
+  responses:
+    '204':
+      description: ''

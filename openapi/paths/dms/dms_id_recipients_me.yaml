@@ -1,0 +1,14 @@
+# Generated from the backend handlers (utoipa). Do not edit; run `cargo run -- openapi` in backend/.
+delete:
+  tags:
+  - dms
+  operationId: dms_leave
+  parameters:
+  - name: id
+    in: path
+    required: true
+    schema:
+      $ref: ../../components/schemas/Id.yaml
+  responses:
+    '204':
+      description: ''

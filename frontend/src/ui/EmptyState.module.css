@@ -1,0 +1,20 @@
+.empty {
+  max-width: 420px;
+  padding: var(--space-7) var(--space-6);
+}
+
+.title {
+  font-size: var(--text-xl);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: var(--tracking-tight);
+}
+
+.body {
+  margin-top: var(--space-2);
+  color: var(--text-muted);
+}
+
+.action {
+  margin-top: var(--space-5);
+}

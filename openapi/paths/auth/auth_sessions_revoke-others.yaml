@@ -1,0 +1,12 @@
+# Generated from the backend handlers (utoipa). Do not edit; run `cargo run -- openapi` in backend/.
+post:
+  tags:
+  - auth
+  operationId: auth_revoke_other_sessions
+  responses:
+    '200':
+      description: ''
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/RevokedSessions.yaml

@@ -1,0 +1,28 @@
+[package]
+name = "glacier"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+
+[dependencies]
+argon2 = "0.5"
+aws-sdk-s3 = { version = "1", features = ["behavior-version-latest"] }
+axum = { version = "0.8", features = ["ws", "multipart"] }
+chrono = { version = "0.4", features = ["serde"] }
+futures-util = "0.3"
+hex = "0.4"
+imagesize = "0.13"
+rand = "0.8"
+redis = { version = "0.32", features = ["tokio-comp", "connection-manager"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = { version = "1", features = ["preserve_order"] }
+serde_norway = "0.9"
+sha2 = "0.10"
+sqlx = { version = "0.8", default-features = false, features = ["mysql", "runtime-tokio", "tls-rustls", "migrate", "macros", "chrono"] }
+thiserror = "2"
+tokio = { version = "1", features = ["full"] }
+tower-http = { version = "0.6", features = ["trace", "limit"] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+utoipa = { version = "5", features = ["axum_extras", "chrono"] }
+utoipa-swagger-ui = { version = "9", features = ["axum", "vendored"] }

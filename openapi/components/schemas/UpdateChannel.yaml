@@ -1,0 +1,27 @@
+# Generated from the backend handlers (utoipa). Do not edit; run `cargo run -- openapi` in backend/.
+type: object
+properties:
+  name:
+    type:
+    - string
+    - 'null'
+  parent_id:
+    oneOf:
+    - type: 'null'
+    - $ref: ./Id.yaml
+  position:
+    type:
+    - integer
+    - 'null'
+    format: int32
+  topic:
+    type:
+    - string
+    - 'null'
+  user_limit:
+    type:
+    - integer
+    - 'null'
+    format: int32
+    description: 'Voice channels: 1-100, or null to remove the limit.'
+    minimum: 0

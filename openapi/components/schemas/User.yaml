@@ -1,0 +1,36 @@
+# Generated from the backend handlers (utoipa). Do not edit; run `cargo run -- openapi` in backend/.
+type: object
+required:
+- avatar_url
+- banner_color
+- bio
+- created_at
+- display_name
+- id
+- username
+properties:
+  avatar_url:
+    type:
+    - string
+    - 'null'
+  banner_color:
+    type:
+    - integer
+    - 'null'
+    format: int32
+    description: Profile banner color, 0xRRGGBB.
+    minimum: 0
+  bio:
+    type:
+    - string
+    - 'null'
+    description: '"About me", up to 190 characters.'
+  created_at:
+    type: string
+    format: date-time
+  display_name:
+    type: string
+  id:
+    $ref: ./Id.yaml
+  username:
+    type: string

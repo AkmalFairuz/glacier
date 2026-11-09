@@ -1,0 +1,19 @@
+.list {
+  display: flex;
+  flex-direction: column;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.item + .item {
+  border-top: 1px solid var(--border);
+}
+
+.toggle {
+  flex: 1;
+  min-width: 0;
+}

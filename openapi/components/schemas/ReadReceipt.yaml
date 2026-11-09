@@ -1,0 +1,11 @@
+# Generated from the backend handlers (utoipa). Do not edit; run `cargo run -- openapi` in backend/.
+type: object
+description: How far another DM participant has read.
+required:
+- last_read_message_id
+- user_id
+properties:
+  last_read_message_id:
+    $ref: ./Id.yaml
+  user_id:
+    $ref: ./Id.yaml

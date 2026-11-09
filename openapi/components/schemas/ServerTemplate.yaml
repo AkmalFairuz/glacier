@@ -1,0 +1,8 @@
+# Generated from the backend handlers (utoipa). Do not edit; run `cargo run -- openapi` in backend/.
+type: string
+enum:
+- blank
+- gaming
+- friends
+- study_group
+- school_club

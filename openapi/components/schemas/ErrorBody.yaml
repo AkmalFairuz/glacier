@@ -1,0 +1,8 @@
+# Generated from the backend handlers (utoipa). Do not edit; run `cargo run -- openapi` in backend/.
+type: object
+description: Error response body, documented for OpenAPI.
+required:
+- error
+properties:
+  error:
+    $ref: ./ErrorDetail.yaml

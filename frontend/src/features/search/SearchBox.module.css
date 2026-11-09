@@ -1,0 +1,106 @@
+.box {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 240px;
+  height: 30px;
+  padding: 0 var(--space-2);
+  border-radius: var(--radius-md);
+  background: var(--bg-sunken);
+  color: var(--text-faint);
+  transition: box-shadow var(--duration);
+}
+
+.open {
+  box-shadow: 0 0 0 1px var(--border-strong);
+}
+
+.icon {
+  flex-shrink: 0;
+}
+
+.input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  padding: 0 var(--space-2);
+  border: 0;
+  background: none;
+  font-size: var(--text-sm);
+  color: var(--text);
+  outline: none;
+}
+
+.clear {
+  display: flex;
+  padding: 2px;
+  border-radius: 50%;
+  color: var(--text-faint);
+}
+
+.clear:hover {
+  color: var(--text);
+}
+
+.hints {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  left: 0;
+  z-index: 30;
+  padding: var(--space-1);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  background: var(--bg-elevated);
+  box-shadow: var(--shadow-pop);
+  animation: hints-in var(--duration) var(--ease-out);
+}
+
+.hint {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+  padding: var(--space-2);
+  border-radius: var(--radius-sm);
+  text-align: left;
+  font-size: var(--text-sm);
+}
+
+.activeHint {
+  background: var(--bg-hover);
+}
+
+.hint > svg {
+  color: var(--text-faint);
+}
+
+.token {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.hintText {
+  color: var(--text-muted);
+}
+
+@keyframes hints-in {
+  from {
+    opacity: 0;
+    translate: 0 -4px;
+  }
+}
+
+/* Phones: an icon until tapped, then it opens up. */
+@media (max-width: 760px) {
+  .box {
+    width: 32px;
+    transition:
+      width var(--duration-slow) var(--ease-out),
+      box-shadow var(--duration);
+  }
+
+  .open {
+    width: min(200px, 50vw);
+  }
+}

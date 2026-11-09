@@ -1,0 +1,26 @@
+.bio {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.text {
+  --chat-font-size: var(--text-sm);
+}
+
+.clamped {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+}
+
+.more {
+  width: fit-content;
+  font-size: var(--text-sm);
+  font-weight: 500;
+}
+
+.more:hover {
+  text-decoration: underline;
+}

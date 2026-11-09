@@ -1,0 +1,29 @@
+# Generated from the backend handlers (utoipa). Do not edit; run `cargo run -- openapi` in backend/.
+get:
+  tags:
+  - users
+  operationId: users_me
+  responses:
+    '200':
+      description: ''
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/User.yaml
+patch:
+  tags:
+  - users
+  operationId: users_update_me
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/UpdateUser.yaml
+    required: true
+  responses:
+    '200':
+      description: ''
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/User.yaml

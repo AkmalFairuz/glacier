@@ -1,0 +1,22 @@
+# Generated from the backend handlers (utoipa). Do not edit; run `cargo run -- openapi` in backend/.
+type: object
+properties:
+  avatar_url:
+    type:
+    - string
+    - 'null'
+    description: '`null` clears the avatar; omit to keep it.'
+  banner_color:
+    type:
+    - integer
+    - 'null'
+    format: int32
+    minimum: 0
+  bio:
+    type:
+    - string
+    - 'null'
+  display_name:
+    type:
+    - string
+    - 'null'

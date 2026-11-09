@@ -1,0 +1,138 @@
+.avatar {
+  position: relative;
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--bg-active);
+  color: var(--text-muted);
+  font-weight: 500;
+  user-select: none;
+}
+
+.avatar > span > svg {
+  display: block;
+  width: 1.5em;
+  height: 1.5em;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: inherit;
+}
+
+/* Generated avatar colors: muted pairs that keep AA contrast in both themes. */
+.tone0 {
+  background: light-dark(#dbe5ee, #2a3a48);
+  color: light-dark(#2f5574, #a9c6de);
+}
+.tone1 {
+  background: light-dark(#d5ebe7, #20403b);
+  color: light-dark(#23675c, #8fd0c3);
+}
+.tone2 {
+  background: light-dark(#dcebd6, #2b3f26);
+  color: light-dark(#3e6b31, #a8d39a);
+}
+.tone3 {
+  background: light-dark(#f1e5cc, #463a20);
+  color: light-dark(#7a5b14, #e2c37f);
+}
+.tone4 {
+  background: light-dark(#f3dcd3, #4a2a22);
+  color: light-dark(#8c3f28, #f0ab94);
+}
+.tone5 {
+  background: light-dark(#f1d9e1, #46262f);
+  color: light-dark(#8a3352, #eba8bf);
+}
+.tone6 {
+  background: light-dark(#e3dcf0, #352c48);
+  color: light-dark(#5a4386, #c6b4ec);
+}
+.tone7 {
+  background: light-dark(#e2e5e9, #31363c);
+  color: light-dark(#4d5560, #c3c9d0);
+}
+
+/* --d: avatar size; --dot / --ring: the status badge and the cut-out ring around it. */
+.xs {
+  --d: 20px;
+  --dot: 6px;
+  --ring: 2px;
+  width: 20px;
+  height: 20px;
+  font-size: 9px;
+}
+.sm {
+  --d: 28px;
+  --dot: 8px;
+  --ring: 2px;
+  width: 28px;
+  height: 28px;
+  font-size: 11px;
+}
+.mid {
+  --d: 32px;
+  --dot: 10px;
+  --ring: 3px;
+  width: 32px;
+  height: 32px;
+  font-size: 12px;
+}
+.md {
+  --d: 40px;
+  --dot: 10px;
+  --ring: 3px;
+  width: 40px;
+  height: 40px;
+  font-size: var(--text-sm);
+}
+.lg {
+  --d: 48px;
+  --dot: 12px;
+  --ring: 3px;
+  width: 48px;
+  height: 48px;
+  font-size: var(--text-md);
+}
+.xl {
+  --d: 80px;
+  --dot: 16px;
+  --ring: 5px;
+  width: 80px;
+  height: 80px;
+  font-size: var(--text-xl);
+}
+.xxl {
+  --d: 96px;
+  --dot: 20px;
+  --ring: 6px;
+  width: 96px;
+  height: 96px;
+  font-size: 28px;
+}
+
+/*
+  Discord-style badge: centered on the avatar's edge at 45° (bottom-right), with a ring in the
+  surrounding background color so it cuts into the circle. 0.1464 = (1 - cos 45°) / 2.
+*/
+.status {
+  position: absolute;
+  right: calc(var(--d) * 0.1464 - var(--dot) / 2 - var(--ring));
+  bottom: calc(var(--d) * 0.1464 - var(--dot) / 2 - var(--ring));
+  box-sizing: content-box;
+  width: var(--dot);
+  height: var(--dot);
+  border: var(--ring) solid var(--status-ring, var(--bg-sidebar));
+  border-radius: 50%;
+  /* Offline: a grey ring with a hole, like Discord. */
+  background: radial-gradient(circle, var(--status-ring, var(--bg-sidebar)) 0 32%, var(--text-faint) 34%);
+}
+
+.online {
+  background: var(--online);
+}

@@ -1,0 +1,38 @@
+.profile {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2);
+  border-radius: var(--radius-md);
+  text-align: left;
+  transition: background-color var(--duration);
+}
+
+.profile:hover {
+  background: var(--bg-hover);
+}
+
+.names {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.display {
+  overflow: hidden;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.edit {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+.logout {
+  width: 100%;
+  justify-content: flex-start;
+  color: var(--danger);
+}

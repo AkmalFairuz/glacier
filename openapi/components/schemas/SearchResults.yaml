@@ -1,0 +1,13 @@
+# Generated from the backend handlers (utoipa). Do not edit; run `cargo run -- openapi` in backend/.
+type: object
+required:
+- has_more
+- messages
+properties:
+  has_more:
+    type: boolean
+  messages:
+    type: array
+    items:
+      $ref: ./Message.yaml
+    description: Newest first.

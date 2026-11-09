@@ -1,0 +1,19 @@
+# Generated from the backend handlers (utoipa). Do not edit; run `cargo run -- openapi` in backend/.
+type: object
+description: 'A user as seen by the caller: shared servers and the caller''s private note.'
+required:
+- mutual_servers
+- note
+- user
+properties:
+  mutual_servers:
+    type: array
+    items:
+      $ref: ./Server.yaml
+  note:
+    type:
+    - string
+    - 'null'
+    description: Only visible to the caller.
+  user:
+    $ref: ./User.yaml

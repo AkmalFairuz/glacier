@@ -1,0 +1,43 @@
+# Generated from the backend handlers (utoipa). Do not edit; run `cargo run -- openapi` in backend/.
+put:
+  tags:
+  - members
+  operationId: members_ban
+  parameters:
+  - name: id
+    in: path
+    required: true
+    schema:
+      $ref: ../../components/schemas/Id.yaml
+  - name: uid
+    in: path
+    required: true
+    schema:
+      $ref: ../../components/schemas/Id.yaml
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/BanBody.yaml
+    required: true
+  responses:
+    '204':
+      description: ''
+delete:
+  tags:
+  - members
+  operationId: members_unban
+  parameters:
+  - name: id
+    in: path
+    required: true
+    schema:
+      $ref: ../../components/schemas/Id.yaml
+  - name: uid
+    in: path
+    required: true
+    schema:
+      $ref: ../../components/schemas/Id.yaml
+  responses:
+    '204':
+      description: ''

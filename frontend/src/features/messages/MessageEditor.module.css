@@ -1,0 +1,21 @@
+.editor {
+  margin: var(--space-1) 0;
+}
+
+.editor textarea {
+  min-height: 0;
+}
+
+.hint {
+  margin-top: var(--space-1);
+  font-size: var(--text-xs);
+  color: var(--text-faint);
+}
+
+.hint button {
+  color: var(--accent);
+}
+
+.hint button:hover {
+  text-decoration: underline;
+}

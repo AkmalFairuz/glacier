@@ -1,0 +1,64 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.heading {
+  font-size: var(--text-sm);
+  font-weight: 700;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 26px;
+  padding: 0 var(--space-3) 0 var(--space-2);
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  background: var(--profile-inset);
+  font-size: var(--text-sm);
+  animation: chip-in var(--duration) var(--ease-out);
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.remove {
+  display: flex;
+  margin-right: -4px;
+  padding: 2px;
+  border-radius: var(--radius-sm);
+  color: var(--text-faint);
+}
+
+.remove:hover {
+  color: var(--text);
+}
+
+.add {
+  width: 128px;
+}
+
+.add button {
+  height: 26px;
+  font-size: var(--text-sm);
+}
+
+@keyframes chip-in {
+  from {
+    opacity: 0;
+    scale: 0.9;
+  }
+}

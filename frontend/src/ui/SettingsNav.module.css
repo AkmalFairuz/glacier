@@ -1,0 +1,96 @@
+.group + .group {
+  margin-top: var(--space-3);
+  padding-top: var(--space-3);
+  border-top: 1px solid var(--border);
+}
+
+.groupLabel {
+  padding: var(--space-1) var(--space-3);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  color: var(--text-faint);
+}
+
+.list,
+.children {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.item,
+.child {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: 100%;
+  min-height: 34px;
+  border-radius: var(--radius-md);
+  font-size: var(--text-md);
+  text-align: left;
+  color: var(--text-muted);
+  transition:
+    background-color var(--duration),
+    color var(--duration);
+}
+
+.item {
+  padding: 0 var(--space-3);
+  font-weight: 500;
+}
+
+.item:hover {
+  background: var(--bg-hover);
+  color: var(--text);
+}
+
+.item[aria-current='page'] {
+  background: var(--bg-active);
+  color: var(--text);
+}
+
+.icon {
+  display: flex;
+  font-size: 16px;
+}
+
+/* Sub-sections hang off a thin rail; the active one gets a bright marker on it. */
+.children {
+  margin: 2px 0 var(--space-1) 19px;
+  padding-left: var(--space-3);
+  border-left: 2px solid var(--border-strong);
+  animation: reveal var(--duration-slow) var(--ease-out);
+}
+
+.child {
+  position: relative;
+  padding: 0 var(--space-2);
+}
+
+.child:hover,
+.child[aria-current='page'] {
+  color: var(--text);
+}
+
+.child[aria-current='page'] {
+  font-weight: 500;
+}
+
+.child[aria-current='page']::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: calc(-1 * var(--space-3) - 2px);
+  width: 2px;
+  height: 20px;
+  border-radius: 1px;
+  background: var(--text);
+  translate: 0 -50%;
+}
+
+@keyframes reveal {
+  from {
+    opacity: 0;
+    translate: 0 -4px;
+  }
+}

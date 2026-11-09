@@ -1,0 +1,5 @@
+# Generated from the backend handlers (utoipa). Do not edit; run `cargo run -- openapi` in backend/.
+type: string
+description: Snowflake ID (u64 encoded as a string)
+examples:
+- '160427101208920064'

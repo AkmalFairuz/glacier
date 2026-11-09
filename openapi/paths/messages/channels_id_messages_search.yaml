@@ -1,0 +1,56 @@
+# Generated from the backend handlers (utoipa). Do not edit; run `cargo run -- openapi` in backend/.
+get:
+  tags:
+  - messages
+  operationId: messages_in_channel
+  parameters:
+  - name: id
+    in: path
+    required: true
+    schema:
+      $ref: ../../components/schemas/Id.yaml
+  - name: q
+    in: query
+    description: Words to find; may be empty when filtering only.
+    required: false
+    schema:
+      type: string
+  - name: author_id
+    in: query
+    description: Only messages by this user.
+    required: false
+    schema:
+      oneOf:
+      - type: 'null'
+      - $ref: ../../components/schemas/Id.yaml
+  - name: channel_id
+    in: query
+    description: Only this channel (server search).
+    required: false
+    schema:
+      oneOf:
+      - type: 'null'
+      - $ref: ../../components/schemas/Id.yaml
+  - name: has
+    in: query
+    description: '`link`, `file` or `image`.'
+    required: false
+    schema:
+      type:
+      - string
+      - 'null'
+  - name: before
+    in: query
+    description: Older than this message id (pagination).
+    required: false
+    schema:
+      oneOf:
+      - type: 'null'
+      - $ref: ../../components/schemas/Id.yaml
+  responses:
+    '200':
+      description: ''
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/SearchResults.yaml

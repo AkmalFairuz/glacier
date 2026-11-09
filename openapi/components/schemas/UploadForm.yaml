@@ -1,0 +1,9 @@
+# Generated from the backend handlers (utoipa). Do not edit; run `cargo run -- openapi` in backend/.
+type: object
+description: multipart/form-data with a single `file` field.
+required:
+- file
+properties:
+  file:
+    type: string
+    format: binary

@@ -1,0 +1,15 @@
+# Generated from the backend handlers (utoipa). Do not edit; run `cargo run -- openapi` in backend/.
+type: object
+properties:
+  expires_in_secs:
+    type:
+    - integer
+    - 'null'
+    format: int64
+    minimum: 0
+  max_uses:
+    type:
+    - integer
+    - 'null'
+    format: int32
+    minimum: 0

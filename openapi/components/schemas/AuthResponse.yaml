@@ -1,0 +1,10 @@
+# Generated from the backend handlers (utoipa). Do not edit; run `cargo run -- openapi` in backend/.
+type: object
+required:
+- token
+- user
+properties:
+  token:
+    type: string
+  user:
+    $ref: ./User.yaml

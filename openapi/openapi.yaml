@@ -1,0 +1,209 @@
+# Generated from the backend handlers (utoipa). Do not edit; run `cargo run -- openapi` in backend/.
+openapi: 3.1.0
+info:
+  title: Glacier API
+  description: REST API for Glacier. Realtime events are delivered over the WebSocket gateway at `/gateway?token=<token>` (not described here).
+  license:
+    name: ''
+  version: 0.1.0
+paths:
+  /api/auth/login:
+    $ref: ./paths/auth/auth_login.yaml
+  /api/auth/logout:
+    $ref: ./paths/auth/auth_logout.yaml
+  /api/auth/password:
+    $ref: ./paths/auth/auth_password.yaml
+  /api/auth/register:
+    $ref: ./paths/auth/auth_register.yaml
+  /api/auth/sessions/revoke-others:
+    $ref: ./paths/auth/auth_sessions_revoke-others.yaml
+  /api/channels/{cid}/messages/{mid}:
+    $ref: ./paths/messages/channels_cid_messages_mid.yaml
+  /api/channels/{cid}/messages/{mid}/reactions/{emoji}:
+    $ref: ./paths/messages/channels_cid_messages_mid_reactions_emoji.yaml
+  /api/channels/{id}:
+    $ref: ./paths/channels/channels_id.yaml
+  /api/channels/{id}/ack:
+    $ref: ./paths/messages/channels_id_ack.yaml
+  /api/channels/{id}/attachments:
+    $ref: ./paths/uploads/channels_id_attachments.yaml
+  /api/channels/{id}/messages:
+    $ref: ./paths/messages/channels_id_messages.yaml
+  /api/channels/{id}/messages/search:
+    $ref: ./paths/messages/channels_id_messages_search.yaml
+  /api/channels/{id}/overwrites/{target_id}:
+    $ref: ./paths/channels/channels_id_overwrites_target_id.yaml
+  /api/channels/{id}/receipts:
+    $ref: ./paths/messages/channels_id_receipts.yaml
+  /api/channels/{id}/typing:
+    $ref: ./paths/messages/channels_id_typing.yaml
+  /api/config/ice:
+    $ref: ./paths/users/config_ice.yaml
+  /api/dms:
+    $ref: ./paths/dms/dms.yaml
+  /api/dms/{id}:
+    $ref: ./paths/dms/dms_id.yaml
+  /api/dms/{id}/recipients/@me:
+    $ref: ./paths/dms/dms_id_recipients_me.yaml
+  /api/dms/{id}/recipients/{uid}:
+    $ref: ./paths/dms/dms_id_recipients_uid.yaml
+  /api/invites/{code}:
+    $ref: ./paths/invites/invites_code.yaml
+  /api/servers:
+    $ref: ./paths/servers/servers.yaml
+  /api/servers/discover:
+    $ref: ./paths/servers/servers_discover.yaml
+  /api/servers/{id}:
+    $ref: ./paths/servers/servers_id.yaml
+  /api/servers/{id}/bans:
+    $ref: ./paths/members/servers_id_bans.yaml
+  /api/servers/{id}/bans/{uid}:
+    $ref: ./paths/members/servers_id_bans_uid.yaml
+  /api/servers/{id}/channels:
+    $ref: ./paths/channels/servers_id_channels.yaml
+  /api/servers/{id}/invites:
+    $ref: ./paths/invites/servers_id_invites.yaml
+  /api/servers/{id}/join:
+    $ref: ./paths/servers/servers_id_join.yaml
+  /api/servers/{id}/members:
+    $ref: ./paths/members/servers_id_members.yaml
+  /api/servers/{id}/members/{uid}:
+    $ref: ./paths/members/servers_id_members_uid.yaml
+  /api/servers/{id}/messages/search:
+    $ref: ./paths/messages/servers_id_messages_search.yaml
+  /api/servers/{id}/permissions:
+    $ref: ./paths/servers/servers_id_permissions.yaml
+  /api/servers/{id}/roles:
+    $ref: ./paths/roles/servers_id_roles.yaml
+  /api/servers/{id}/roles/{rid}:
+    $ref: ./paths/roles/servers_id_roles_rid.yaml
+  /api/servers/{id}/voice-states:
+    $ref: ./paths/voice/servers_id_voice-states.yaml
+  /api/uploads/image:
+    $ref: ./paths/uploads/uploads_image.yaml
+  /api/users/@me:
+    $ref: ./paths/users/users_me.yaml
+  /api/users/search:
+    $ref: ./paths/users/users_search.yaml
+  /api/users/{id}/note:
+    $ref: ./paths/users/users_id_note.yaml
+  /api/users/{id}/profile:
+    $ref: ./paths/users/users_id_profile.yaml
+components:
+  schemas:
+    AckBody:
+      $ref: ./components/schemas/AckBody.yaml
+    Attachment:
+      $ref: ./components/schemas/Attachment.yaml
+    AuthResponse:
+      $ref: ./components/schemas/AuthResponse.yaml
+    Ban:
+      $ref: ./components/schemas/Ban.yaml
+    BanBody:
+      $ref: ./components/schemas/BanBody.yaml
+    ChangePasswordBody:
+      $ref: ./components/schemas/ChangePasswordBody.yaml
+    Channel:
+      $ref: ./components/schemas/Channel.yaml
+    ChannelPosition:
+      $ref: ./components/schemas/ChannelPosition.yaml
+    ChannelType:
+      $ref: ./components/schemas/ChannelType.yaml
+    CreateChannel:
+      $ref: ./components/schemas/CreateChannel.yaml
+    CreateDm:
+      $ref: ./components/schemas/CreateDm.yaml
+    CreateInvite:
+      $ref: ./components/schemas/CreateInvite.yaml
+    CreateMessage:
+      $ref: ./components/schemas/CreateMessage.yaml
+    CreateRole:
+      $ref: ./components/schemas/CreateRole.yaml
+    CreateServer:
+      $ref: ./components/schemas/CreateServer.yaml
+    EditMessage:
+      $ref: ./components/schemas/EditMessage.yaml
+    ErrorBody:
+      $ref: ./components/schemas/ErrorBody.yaml
+    ErrorDetail:
+      $ref: ./components/schemas/ErrorDetail.yaml
+    IceConfig:
+      $ref: ./components/schemas/IceConfig.yaml
+    IceServer:
+      $ref: ./components/schemas/IceServer.yaml
+    Id:
+      $ref: ./components/schemas/Id.yaml
+    Invite:
+      $ref: ./components/schemas/Invite.yaml
+    LoginBody:
+      $ref: ./components/schemas/LoginBody.yaml
+    Member:
+      $ref: ./components/schemas/Member.yaml
+    Message:
+      $ref: ./components/schemas/Message.yaml
+    NoteBody:
+      $ref: ./components/schemas/NoteBody.yaml
+    Overwrite:
+      $ref: ./components/schemas/Overwrite.yaml
+    Permissions:
+      $ref: ./components/schemas/Permissions.yaml
+    PutOverwrite:
+      $ref: ./components/schemas/PutOverwrite.yaml
+    Reaction:
+      $ref: ./components/schemas/Reaction.yaml
+    ReadReceipt:
+      $ref: ./components/schemas/ReadReceipt.yaml
+    RegisterBody:
+      $ref: ./components/schemas/RegisterBody.yaml
+    RenameDm:
+      $ref: ./components/schemas/RenameDm.yaml
+    RevokedSessions:
+      $ref: ./components/schemas/RevokedSessions.yaml
+    Role:
+      $ref: ./components/schemas/Role.yaml
+    SearchResults:
+      $ref: ./components/schemas/SearchResults.yaml
+    Server:
+      $ref: ./components/schemas/Server.yaml
+    ServerTemplate:
+      $ref: ./components/schemas/ServerTemplate.yaml
+    TargetType:
+      $ref: ./components/schemas/TargetType.yaml
+    UpdateChannel:
+      $ref: ./components/schemas/UpdateChannel.yaml
+    UpdateMember:
+      $ref: ./components/schemas/UpdateMember.yaml
+    UpdateRole:
+      $ref: ./components/schemas/UpdateRole.yaml
+    UpdateServer:
+      $ref: ./components/schemas/UpdateServer.yaml
+    UpdateUser:
+      $ref: ./components/schemas/UpdateUser.yaml
+    UploadForm:
+      $ref: ./components/schemas/UploadForm.yaml
+    UploadedImage:
+      $ref: ./components/schemas/UploadedImage.yaml
+    User:
+      $ref: ./components/schemas/User.yaml
+    UserProfile:
+      $ref: ./components/schemas/UserProfile.yaml
+    VoiceState:
+      $ref: ./components/schemas/VoiceState.yaml
+  securitySchemes:
+    bearer:
+      type: http
+      scheme: bearer
+security:
+- bearer: []
+tags:
+- name: auth
+- name: users
+- name: servers
+- name: members
+- name: roles
+- name: channels
+- name: messages
+- name: uploads
+- name: invites
+- name: dms
+- name: voice

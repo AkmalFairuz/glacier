@@ -1,0 +1,21 @@
+.block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.heading {
+  font-size: var(--text-sm);
+  font-weight: 700;
+}
+
+.dates {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-5);
+  font-size: var(--text-sm);
+}
+
+.dates dt {
+  color: var(--text-faint);
+}

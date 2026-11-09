@@ -1,0 +1,47 @@
+# Generated from the backend handlers (utoipa). Do not edit; run `cargo run -- openapi` in backend/.
+delete:
+  tags:
+  - roles
+  operationId: roles_delete
+  parameters:
+  - name: id
+    in: path
+    required: true
+    schema:
+      $ref: ../../components/schemas/Id.yaml
+  - name: rid
+    in: path
+    required: true
+    schema:
+      $ref: ../../components/schemas/Id.yaml
+  responses:
+    '204':
+      description: ''
+patch:
+  tags:
+  - roles
+  operationId: roles_update
+  parameters:
+  - name: id
+    in: path
+    required: true
+    schema:
+      $ref: ../../components/schemas/Id.yaml
+  - name: rid
+    in: path
+    required: true
+    schema:
+      $ref: ../../components/schemas/Id.yaml
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/UpdateRole.yaml
+    required: true
+  responses:
+    '200':
+      description: ''
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/Role.yaml

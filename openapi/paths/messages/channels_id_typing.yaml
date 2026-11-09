@@ -1,0 +1,14 @@
+# Generated from the backend handlers (utoipa). Do not edit; run `cargo run -- openapi` in backend/.
+post:
+  tags:
+  - messages
+  operationId: messages_typing
+  parameters:
+  - name: id
+    in: path
+    required: true
+    schema:
+      $ref: ../../components/schemas/Id.yaml
+  responses:
+    '204':
+      description: ''

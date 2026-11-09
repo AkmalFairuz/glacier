@@ -1,0 +1,30 @@
+.list {
+  width: var(--members-width);
+  flex-shrink: 0;
+  overflow-y: auto;
+  padding: var(--space-2) var(--space-2) var(--space-4);
+  background: var(--bg-sidebar);
+  --status-ring: var(--bg-sidebar);
+}
+
+.section + .section {
+  margin-top: var(--space-2);
+}
+
+.heading {
+  padding: var(--space-4) var(--space-2) var(--space-1);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--text-faint);
+}
+
+@media (max-width: 1100px) {
+  .list {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 20;
+    box-shadow: var(--shadow-pop);
+  }
+}

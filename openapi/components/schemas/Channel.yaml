@@ -1,0 +1,64 @@
+# Generated from the backend handlers (utoipa). Do not edit; run `cargo run -- openapi` in backend/.
+type: object
+required:
+- id
+- last_message_id
+- name
+- overwrites
+- owner_id
+- parent_id
+- position
+- recipients
+- server_id
+- topic
+- type
+- user_limit
+properties:
+  id:
+    $ref: ./Id.yaml
+  last_message_id:
+    oneOf:
+    - type: 'null'
+    - $ref: ./Id.yaml
+  name:
+    type:
+    - string
+    - 'null'
+  overwrites:
+    type: array
+    items:
+      $ref: ./Overwrite.yaml
+    description: Empty for DMs.
+  owner_id:
+    oneOf:
+    - type: 'null'
+    - $ref: ./Id.yaml
+  parent_id:
+    oneOf:
+    - type: 'null'
+    - $ref: ./Id.yaml
+  position:
+    type: integer
+    format: int32
+  recipients:
+    type: array
+    items:
+      $ref: ./User.yaml
+    description: All participants (including the caller) for DMs; empty for server channels.
+  server_id:
+    oneOf:
+    - type: 'null'
+    - $ref: ./Id.yaml
+  topic:
+    type:
+    - string
+    - 'null'
+  type:
+    $ref: ./ChannelType.yaml
+  user_limit:
+    type:
+    - integer
+    - 'null'
+    format: int32
+    description: 'Voice channels only: most people allowed at once (1-100), or null for no limit.'
+    minimum: 0

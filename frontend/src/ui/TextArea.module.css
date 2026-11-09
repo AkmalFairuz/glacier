@@ -1,0 +1,33 @@
+.textarea {
+  width: 100%;
+  min-height: 80px;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  background: var(--bg-main);
+  font-size: var(--text-md);
+  line-height: 1.4;
+  resize: vertical;
+}
+
+.textarea:focus-visible {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent);
+}
+
+.textarea::placeholder {
+  color: var(--text-faint);
+}
+
+.bare {
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  resize: none;
+}
+
+.bare:focus-visible {
+  box-shadow: none;
+}

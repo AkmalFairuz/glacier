@@ -1,0 +1,34 @@
+# Generated from the backend handlers (utoipa). Do not edit; run `cargo run -- openapi` in backend/.
+type: object
+required:
+- color
+- id
+- is_default
+- name
+- permissions
+- position
+- server_id
+properties:
+  color:
+    type:
+    - integer
+    - 'null'
+    format: int32
+    description: 0xRRGGBB
+    minimum: 0
+  id:
+    $ref: ./Id.yaml
+  is_default:
+    type: boolean
+    description: The @everyone role; its id equals the server id.
+  name:
+    type: string
+  permissions:
+    type: integer
+    format: int64
+    minimum: 0
+  position:
+    type: integer
+    format: int32
+  server_id:
+    $ref: ./Id.yaml

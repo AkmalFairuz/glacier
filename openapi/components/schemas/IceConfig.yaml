@@ -1,0 +1,9 @@
+# Generated from the backend handlers (utoipa). Do not edit; run `cargo run -- openapi` in backend/.
+type: object
+required:
+- ice_servers
+properties:
+  ice_servers:
+    type: array
+    items:
+      $ref: ./IceServer.yaml

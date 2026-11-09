@@ -1,0 +1,38 @@
+.sidebar {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--header-height);
+  padding: 0 var(--space-2) 0 var(--space-4);
+  border-bottom: 1px solid var(--border);
+}
+
+.title {
+  font-size: var(--text-md);
+  font-weight: 700;
+}
+
+.list {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--space-3) var(--space-2) var(--space-4) var(--space-3);
+}
+
+.list ul {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.none {
+  padding: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}

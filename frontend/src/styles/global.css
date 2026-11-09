@@ -1,0 +1,53 @@
+body {
+  font-family: var(--font-text);
+  font-size: var(--text-md);
+  line-height: 1.4;
+  color: var(--text);
+  background: var(--bg-main);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+::selection {
+  background: var(--accent-subtle);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* Motion: off when the OS asks (unless the user chose "Always animate"), or when chosen in Settings. */
+@media (prefers-reduced-motion: reduce) {
+  :root:not([data-motion='full']) * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+:root[data-motion='reduce'] * {
+  transition: none !important;
+  animation: none !important;
+}
+
+:root[data-underline-links='true'] a {
+  text-decoration: underline;
+}

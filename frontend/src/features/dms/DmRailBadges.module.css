@@ -1,0 +1,49 @@
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.item {
+  animation: pop-in var(--duration-slow) var(--ease-out);
+}
+
+.link {
+  position: relative;
+  display: flex;
+  border-radius: 50%;
+}
+
+.link > span:first-child {
+  transition: border-radius var(--duration-slow) var(--ease-out);
+}
+
+.link:hover > span:first-child {
+  border-radius: 34%;
+}
+
+/* Count badge cut out of the rail, bottom-right of the avatar. */
+.badge {
+  position: absolute;
+  right: -4px;
+  bottom: -4px;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 6px;
+  border: 3px solid var(--bg-rail);
+  border-radius: 11px;
+  background: var(--button-red);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 16px;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+
+@keyframes pop-in {
+  from {
+    opacity: 0;
+    scale: 0.6;
+  }
+}

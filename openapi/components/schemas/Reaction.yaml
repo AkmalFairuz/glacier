@@ -1,0 +1,12 @@
+# Generated from the backend handlers (utoipa). Do not edit; run `cargo run -- openapi` in backend/.
+type: object
+required:
+- emoji
+- user_ids
+properties:
+  emoji:
+    type: string
+  user_ids:
+    type: array
+    items:
+      $ref: ./Id.yaml

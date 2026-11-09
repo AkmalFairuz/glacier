@@ -1,0 +1,33 @@
+.meter {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(48, 1fr);
+  gap: 2px;
+  height: 24px;
+  min-width: 0;
+}
+
+.meter > span {
+  border-radius: 1px;
+}
+
+.off {
+  background: var(--border-strong);
+}
+
+.below {
+  background: var(--gray-500);
+}
+
+.on {
+  background: var(--online);
+}
+
+.gate {
+  position: absolute;
+  top: -3px;
+  bottom: -3px;
+  left: var(--at);
+  width: 2px;
+  background: var(--text);
+}

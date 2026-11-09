@@ -1,0 +1,94 @@
+.screen {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100dvh;
+  padding: var(--space-8) var(--space-4) 30vh;
+  overflow: hidden;
+  background: var(--bg-rail);
+}
+
+.wordmark {
+  position: absolute;
+  top: var(--space-5);
+  left: var(--space-6);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-lg);
+  font-weight: 700;
+  letter-spacing: var(--tracking-tight);
+}
+
+.mark {
+  font-size: 24px;
+  color: var(--accent);
+}
+
+/* The card rests on the strata: the horizon starts below it and the card's lower edge overlaps the top layers. */
+.horizon {
+  position: absolute;
+  inset: auto 0 0;
+  height: 38vh;
+  min-height: 200px;
+  pointer-events: none;
+  animation: settle 600ms var(--ease-out);
+}
+
+.card {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 440px;
+  padding: var(--space-6);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--bg-elevated);
+  box-shadow: var(--shadow-pop);
+  animation: card-in var(--duration-slow) var(--ease-out);
+}
+
+@keyframes card-in {
+  from {
+    opacity: 0;
+    translate: 0 8px;
+  }
+}
+
+@keyframes settle {
+  from {
+    opacity: 0;
+    translate: 0 24px;
+  }
+}
+
+@media (max-width: 560px) {
+  .screen {
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+    padding: var(--space-5) 0 0;
+    background: var(--bg-elevated);
+  }
+
+  .wordmark {
+    position: static;
+    padding: 0 var(--space-4);
+  }
+
+  .horizon {
+    position: static;
+    height: 96px;
+    min-height: 0;
+    margin-top: auto;
+  }
+
+  .card {
+    max-width: none;
+    padding: var(--space-6) var(--space-4) var(--space-5);
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+}

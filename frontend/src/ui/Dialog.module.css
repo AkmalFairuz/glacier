@@ -1,0 +1,85 @@
+.dialog {
+  width: calc(100% - var(--space-5));
+  max-height: calc(100dvh - var(--space-6));
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  background: var(--bg-elevated);
+  color: var(--text);
+  box-shadow: var(--shadow-pop);
+}
+
+.dialog::backdrop {
+  background: transparent;
+}
+
+/* Enter and exit: the dialog stays in the top layer while it fades out. */
+.dialog,
+.dialog::backdrop {
+  transition:
+    opacity var(--duration-slow) var(--ease-out),
+    translate var(--duration-slow) var(--ease-out),
+    scale var(--duration-slow) var(--ease-out),
+    background-color var(--duration-slow) var(--ease-out),
+    overlay var(--duration-slow) allow-discrete,
+    display var(--duration-slow) allow-discrete;
+}
+
+.dialog {
+  opacity: 0;
+  translate: 0 6px;
+  scale: 0.985;
+}
+
+.dialog[open] {
+  opacity: 1;
+  translate: 0 0;
+  scale: 1;
+}
+
+.dialog[open]::backdrop {
+  background: var(--overlay);
+}
+
+@starting-style {
+  .dialog[open] {
+    opacity: 0;
+    translate: 0 6px;
+    scale: 0.985;
+  }
+
+  .dialog[open]::backdrop {
+    background: transparent;
+  }
+}
+
+.sm {
+  max-width: 440px;
+}
+
+.md {
+  max-width: 600px;
+}
+
+.lg {
+  max-width: 880px;
+}
+
+/* Fixed frame: same size whatever the page inside shows. */
+.window {
+  width: min(1080px, calc(100vw - var(--space-6)));
+  max-width: none;
+  height: min(720px, calc(100dvh - var(--space-6)));
+  max-height: none;
+  background: var(--bg-main);
+}
+
+@media (max-width: 720px) {
+  .window {
+    width: 100vw;
+    height: 100dvh;
+    border: 0;
+    border-radius: 0;
+  }
+}

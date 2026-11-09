@@ -1,0 +1,76 @@
+.editor {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 100%;
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.title {
+  overflow: hidden;
+  font-size: var(--text-lg);
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.delete {
+  color: var(--danger);
+}
+
+.editor > nav {
+  border-bottom: 1px solid var(--border);
+}
+
+.panel {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-4) 0;
+  animation: panel-in var(--duration) var(--ease-out);
+}
+
+.error {
+  font-size: var(--text-sm);
+  color: var(--danger);
+}
+
+/* Unsaved-changes bar pinned to the bottom of the editor's scroll area. */
+.footer {
+  position: sticky;
+  bottom: var(--space-3);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-2) var(--space-2) var(--space-2) var(--space-4);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  background: var(--bg-elevated);
+  box-shadow: var(--shadow-pop);
+  animation: rise var(--duration-slow) var(--ease-out);
+}
+
+.footer > span:first-child {
+  flex: 1;
+  font-weight: 500;
+}
+
+@keyframes panel-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    translate: 0 8px;
+  }
+}

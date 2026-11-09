@@ -1,0 +1,26 @@
+# Generated from the backend handlers (utoipa). Do not edit; run `cargo run -- openapi` in backend/.
+post:
+  tags:
+  - auth
+  operationId: auth_register
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/RegisterBody.yaml
+    required: true
+  responses:
+    '200':
+      description: ''
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/AuthResponse.yaml
+    '409':
+      description: ''
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/ErrorBody.yaml
+  security:
+  - {}

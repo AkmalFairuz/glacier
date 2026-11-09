@@ -1,0 +1,27 @@
+# Generated from the backend handlers (utoipa). Do not edit; run `cargo run -- openapi` in backend/.
+type: object
+required:
+- joined_at
+- nickname
+- online
+- role_ids
+- server_id
+- user
+properties:
+  joined_at:
+    type: string
+    format: date-time
+  nickname:
+    type:
+    - string
+    - 'null'
+  online:
+    type: boolean
+  role_ids:
+    type: array
+    items:
+      $ref: ./Id.yaml
+  server_id:
+    $ref: ./Id.yaml
+  user:
+    $ref: ./User.yaml

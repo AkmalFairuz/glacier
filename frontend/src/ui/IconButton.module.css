@@ -1,0 +1,47 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
+  color: var(--text-muted);
+  transition:
+    background-color var(--duration),
+    color var(--duration),
+    scale 80ms var(--ease-out);
+}
+
+.button:hover:not(:disabled) {
+  background: var(--bg-hover);
+  color: var(--text);
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.md {
+  width: 32px;
+  height: 32px;
+  font-size: 18px;
+}
+
+.sm {
+  width: 26px;
+  height: 26px;
+  font-size: 15px;
+}
+
+.active,
+.active:hover {
+  color: var(--accent);
+  background: none;
+}
+
+.danger {
+  color: var(--danger);
+}
+
+.button:active:not(:disabled) {
+  scale: 0.92;
+}

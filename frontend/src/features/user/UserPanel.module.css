@@ -1,0 +1,33 @@
+.panel {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  height: var(--bottom-bar-height);
+  padding: 0 var(--space-2) 0 var(--space-3);
+}
+
+.panel > :first-child {
+  margin-right: var(--space-1);
+}
+
+.names {
+  flex: 1;
+  min-width: 0;
+}
+
+.display {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--text-sm);
+  font-weight: 700;
+}
+
+.username {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  font-size: 11px;
+  color: var(--text-faint);
+}

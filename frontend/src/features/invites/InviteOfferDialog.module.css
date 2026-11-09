@@ -1,0 +1,13 @@
+.body {
+  padding: var(--space-6) var(--space-5) var(--space-5);
+}
+
+.error {
+  font-size: var(--text-sm);
+  color: var(--danger);
+}
+
+.note {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}

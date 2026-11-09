@@ -1,0 +1,8 @@
+# Generated from the backend handlers (utoipa). Do not edit; run `cargo run -- openapi` in backend/.
+post:
+  tags:
+  - auth
+  operationId: auth_logout
+  responses:
+    '204':
+      description: ''

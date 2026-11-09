@@ -1,0 +1,24 @@
+# Generated from the backend handlers (utoipa). Do not edit; run `cargo run -- openapi` in backend/.
+type: object
+properties:
+  color:
+    type:
+    - integer
+    - 'null'
+    format: int32
+    minimum: 0
+  name:
+    type:
+    - string
+    - 'null'
+  permissions:
+    type:
+    - integer
+    - 'null'
+    format: int64
+    minimum: 0
+  position:
+    type:
+    - integer
+    - 'null'
+    format: int32

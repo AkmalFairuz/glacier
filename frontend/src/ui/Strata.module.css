@@ -1,0 +1,21 @@
+.strata {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.l1 {
+  fill: var(--strata-1);
+}
+.l2 {
+  fill: var(--strata-2);
+}
+.l3 {
+  fill: var(--strata-3);
+}
+.l4 {
+  fill: var(--strata-4);
+}
+.l5 {
+  fill: var(--strata-5);
+}

@@ -1,0 +1,13 @@
+.mark {
+  width: 1em;
+  height: 1em;
+  fill: currentColor;
+}
+
+.top {
+  opacity: 0.45;
+}
+
+.middle {
+  opacity: 0.72;
+}

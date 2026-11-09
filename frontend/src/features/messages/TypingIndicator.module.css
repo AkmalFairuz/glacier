@@ -1,0 +1,94 @@
+.typing {
+  position: absolute;
+  right: 0;
+  bottom: 100%;
+  left: 0;
+  height: 22px;
+  padding: 0 var(--space-4);
+  line-height: 22px;
+  pointer-events: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+.line {
+  animation: typing-in var(--duration) var(--ease-out);
+}
+
+.typing strong {
+  font-weight: 700;
+  color: var(--text);
+}
+
+@keyframes typing-in {
+  from {
+    opacity: 0;
+    translate: 0 2px;
+  }
+}
+
+.dots {
+  display: inline-flex;
+  gap: 3px;
+  margin-right: var(--space-2);
+  vertical-align: middle;
+}
+
+.dots > span {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  animation: bounce 1s var(--ease-out) infinite;
+}
+
+.dots > span:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.dots > span:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+@keyframes bounce {
+  0%,
+  60%,
+  100% {
+    translate: 0 0;
+    opacity: 0.5;
+  }
+
+  30% {
+    translate: 0 -3px;
+    opacity: 1;
+  }
+}
+
+/* Reduced motion: no bounce, but the dots still pulse so "typing" reads as live. */
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :global(:root:not([data-motion='reduce'], [data-motion='full'])) .dots > span {
+    animation: pulse 1.2s ease-in-out infinite !important;
+  }
+
+  :global(:root:not([data-motion='reduce'], [data-motion='full'])) .dots > span:nth-child(2) {
+    animation-delay: 0.2s !important;
+  }
+
+  :global(:root:not([data-motion='reduce'], [data-motion='full'])) .dots > span:nth-child(3) {
+    animation-delay: 0.4s !important;
+  }
+}

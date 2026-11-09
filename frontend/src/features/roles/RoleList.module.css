@@ -1,0 +1,135 @@
+.list {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  border-right: 1px solid var(--border);
+  padding-right: var(--space-3);
+}
+
+.head {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+  padding-bottom: var(--space-3);
+}
+
+.scroll {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  border-radius: var(--radius-md);
+  transition:
+    background-color var(--duration),
+    opacity var(--duration);
+}
+
+.row:hover {
+  background: var(--bg-hover);
+}
+
+.active,
+.active:hover {
+  background: var(--bg-active);
+}
+
+.dragging {
+  opacity: 0.45;
+}
+
+.handle,
+.handleSpace {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 36px;
+}
+
+.handle {
+  border-radius: var(--radius-sm);
+  color: var(--text-faint);
+  cursor: grab;
+  touch-action: none;
+  opacity: 0;
+  transition:
+    opacity var(--duration),
+    color var(--duration);
+}
+
+.row:hover .handle,
+.handle:focus-visible,
+.dragging .handle {
+  opacity: 1;
+}
+
+.handle:hover {
+  color: var(--text);
+}
+
+.dragging .handle {
+  cursor: grabbing;
+}
+
+.select {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+  height: 36px;
+  padding-right: var(--space-2);
+  text-align: left;
+  font-size: var(--text-md);
+  color: var(--text-muted);
+}
+
+.active .select {
+  color: var(--text);
+  font-weight: 500;
+}
+
+.name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dot {
+  flex-shrink: 0;
+  width: 10px;
+  height: 10px;
+  border: 1px solid var(--border-strong);
+  border-radius: 50%;
+}
+
+.dropLine,
+.dropLineEnd {
+  height: 2px;
+  border-radius: 1px;
+  background: var(--accent);
+}
+
+.dropLine {
+  position: absolute;
+  top: -2px;
+  right: 0;
+  left: 0;
+}
+
+@media (hover: none) {
+  .handle {
+    opacity: 1;
+  }
+}

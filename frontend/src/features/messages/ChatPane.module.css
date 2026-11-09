@@ -1,0 +1,20 @@
+.pane {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  animation: pane-in var(--duration) var(--ease-out);
+}
+
+@keyframes pane-in {
+  from {
+    opacity: 0;
+  }
+}
+
+/* The typing indicator floats just above the composer, so it never adds a row. */
+.footer {
+  position: relative;
+  flex-shrink: 0;
+}

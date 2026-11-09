@@ -1,0 +1,12 @@
+# Generated from the backend handlers (utoipa). Do not edit; run `cargo run -- openapi` in backend/.
+get:
+  tags:
+  - users
+  operationId: users_ice_config
+  responses:
+    '200':
+      description: ''
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/IceConfig.yaml

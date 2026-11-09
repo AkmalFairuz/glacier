@@ -1,0 +1,22 @@
+# Generated from the backend handlers (utoipa). Do not edit; run `cargo run -- openapi` in backend/.
+get:
+  tags:
+  - servers
+  operationId: servers_discover
+  parameters:
+  - name: q
+    in: query
+    required: false
+    schema:
+      type:
+      - string
+      - 'null'
+  responses:
+    '200':
+      description: ''
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: ../../components/schemas/Server.yaml

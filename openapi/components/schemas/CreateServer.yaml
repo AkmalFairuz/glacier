@@ -1,0 +1,20 @@
+# Generated from the backend handlers (utoipa). Do not edit; run `cargo run -- openapi` in backend/.
+type: object
+required:
+- name
+properties:
+  description:
+    type:
+    - string
+    - 'null'
+  icon_url:
+    type:
+    - string
+    - 'null'
+  is_public:
+    type: boolean
+  name:
+    type: string
+  template:
+    $ref: ./ServerTemplate.yaml
+    description: Starting channels; defaults to a blank server.

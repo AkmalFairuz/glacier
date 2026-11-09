@@ -1,0 +1,55 @@
+.host {
+  position: fixed;
+  inset: auto;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  background: var(--bg-elevated);
+  color: var(--text);
+  box-shadow: var(--shadow-pop);
+  opacity: 0;
+  scale: 0.98;
+  transition:
+    opacity var(--duration) var(--ease-out),
+    scale var(--duration) var(--ease-out),
+    overlay var(--duration) allow-discrete,
+    display var(--duration) allow-discrete;
+}
+
+.host:popover-open {
+  opacity: 1;
+  scale: 1;
+}
+
+@starting-style {
+  .host:popover-open {
+    opacity: 0;
+    scale: 0.98;
+  }
+}
+
+@media (max-width: 560px) {
+  .host {
+    width: 100vw;
+    max-height: calc(100dvh - 8px);
+    overflow-y: auto;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    translate: 0 0;
+  }
+
+  .host:popover-open {
+    animation: sheet-up var(--duration-slow) var(--ease-out);
+  }
+
+  .host article {
+    width: 100%;
+  }
+}
+
+@keyframes sheet-up {
+  from {
+    translate: 0 40px;
+  }
+}

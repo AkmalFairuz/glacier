@@ -1,0 +1,18 @@
+# Generated from the backend handlers (utoipa). Do not edit; run `cargo run -- openapi` in backend/.
+type: object
+required:
+- name
+- type
+properties:
+  name:
+    type: string
+  parent_id:
+    oneOf:
+    - type: 'null'
+    - $ref: ./Id.yaml
+  topic:
+    type:
+    - string
+    - 'null'
+  type:
+    $ref: ./ChannelType.yaml

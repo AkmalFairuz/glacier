@@ -1,0 +1,46 @@
+.icon {
+  position: relative;
+  display: flex;
+  border-radius: 50%;
+  text-decoration: none;
+}
+
+.icon:hover {
+  text-decoration: none;
+}
+
+.icon > span {
+  transition: border-radius var(--duration-slow) var(--ease-out);
+}
+
+.icon:hover > span,
+.active > span {
+  border-radius: 34%;
+}
+
+/* Indicator pill on the rail edge: small on hover, tall when active. */
+.icon::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: -12px;
+  width: 4px;
+  height: 0;
+  border-radius: 0 4px 4px 0;
+  background: var(--text);
+  translate: 0 -50%;
+  transition: height var(--duration-slow) var(--ease-out);
+}
+
+.unread::before {
+  height: 8px;
+}
+
+.icon:hover::before {
+  height: 20px;
+}
+
+.active::before,
+.active:hover::before {
+  height: 40px;
+}

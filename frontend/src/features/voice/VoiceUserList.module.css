@@ -1,0 +1,63 @@
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 2px 0 var(--space-1) var(--space-6);
+}
+
+.user {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  height: 26px;
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  animation: join var(--duration-slow) var(--ease-out);
+}
+
+.name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.flags {
+  display: inline-flex;
+  gap: var(--space-1);
+  padding-right: var(--space-2);
+  color: var(--text-faint);
+}
+
+.speaking .person > :first-child {
+  box-shadow: 0 0 0 2px var(--online);
+}
+
+.speaking .name {
+  color: var(--text);
+}
+
+.person > :first-child {
+  transition: box-shadow var(--duration);
+}
+
+@keyframes join {
+  from {
+    opacity: 0;
+    translate: -4px 0;
+  }
+}
+
+.person {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+  text-align: left;
+}
+
+.person:hover .name {
+  color: var(--text);
+}

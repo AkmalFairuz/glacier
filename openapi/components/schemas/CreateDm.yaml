@@ -1,0 +1,14 @@
+# Generated from the backend handlers (utoipa). Do not edit; run `cargo run -- openapi` in backend/.
+type: object
+required:
+- user_ids
+properties:
+  name:
+    type:
+    - string
+    - 'null'
+  user_ids:
+    type: array
+    items:
+      $ref: ./Id.yaml
+    description: Other participants. One id opens (or reuses) a 1:1 DM; more creates a group.

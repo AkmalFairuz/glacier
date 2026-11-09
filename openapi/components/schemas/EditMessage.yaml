@@ -1,0 +1,7 @@
+# Generated from the backend handlers (utoipa). Do not edit; run `cargo run -- openapi` in backend/.
+type: object
+required:
+- content
+properties:
+  content:
+    type: string

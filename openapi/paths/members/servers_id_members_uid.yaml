@@ -1,0 +1,49 @@
+# Generated from the backend handlers (utoipa). Do not edit; run `cargo run -- openapi` in backend/.
+delete:
+  tags:
+  - members
+  operationId: members_remove
+  parameters:
+  - name: id
+    in: path
+    required: true
+    schema:
+      $ref: ../../components/schemas/Id.yaml
+  - name: uid
+    in: path
+    description: user id, or @me to leave
+    required: true
+    schema:
+      type: string
+  responses:
+    '204':
+      description: ''
+patch:
+  tags:
+  - members
+  operationId: members_update
+  parameters:
+  - name: id
+    in: path
+    required: true
+    schema:
+      $ref: ../../components/schemas/Id.yaml
+  - name: uid
+    in: path
+    description: user id or @me
+    required: true
+    schema:
+      type: string
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/UpdateMember.yaml
+    required: true
+  responses:
+    '200':
+      description: ''
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/Member.yaml

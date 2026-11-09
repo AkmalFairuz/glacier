@@ -1,0 +1,25 @@
+.line {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  width: fit-content;
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+.line:hover {
+  color: var(--text);
+  text-decoration: underline;
+}
+
+.stack {
+  display: flex;
+}
+
+.stack > span {
+  box-shadow: 0 0 0 2px var(--profile-bg);
+}
+
+.stack > span + span {
+  margin-left: -6px;
+}

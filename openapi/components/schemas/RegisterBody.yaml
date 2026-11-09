@@ -1,0 +1,14 @@
+# Generated from the backend handlers (utoipa). Do not edit; run `cargo run -- openapi` in backend/.
+type: object
+required:
+- username
+- password
+properties:
+  display_name:
+    type:
+    - string
+    - 'null'
+  password:
+    type: string
+  username:
+    type: string

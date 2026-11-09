@@ -1,0 +1,36 @@
+# Generated from the backend handlers (utoipa). Do not edit; run `cargo run -- openapi` in backend/.
+type: object
+required:
+- attachments
+- author
+- channel_id
+- content
+- created_at
+- edited_at
+- id
+- reactions
+properties:
+  attachments:
+    type: array
+    items:
+      $ref: ./Attachment.yaml
+  author:
+    $ref: ./User.yaml
+  channel_id:
+    $ref: ./Id.yaml
+  content:
+    type: string
+  created_at:
+    type: string
+    format: date-time
+  edited_at:
+    type:
+    - string
+    - 'null'
+    format: date-time
+  id:
+    $ref: ./Id.yaml
+  reactions:
+    type: array
+    items:
+      $ref: ./Reaction.yaml

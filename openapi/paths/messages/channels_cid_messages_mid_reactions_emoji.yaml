@@ -1,0 +1,49 @@
+# Generated from the backend handlers (utoipa). Do not edit; run `cargo run -- openapi` in backend/.
+put:
+  tags:
+  - messages
+  operationId: messages_add
+  parameters:
+  - name: cid
+    in: path
+    required: true
+    schema:
+      $ref: ../../components/schemas/Id.yaml
+  - name: mid
+    in: path
+    required: true
+    schema:
+      $ref: ../../components/schemas/Id.yaml
+  - name: emoji
+    in: path
+    description: URL-encoded unicode emoji
+    required: true
+    schema:
+      type: string
+  responses:
+    '204':
+      description: ''
+delete:
+  tags:
+  - messages
+  operationId: messages_remove
+  parameters:
+  - name: cid
+    in: path
+    required: true
+    schema:
+      $ref: ../../components/schemas/Id.yaml
+  - name: mid
+    in: path
+    required: true
+    schema:
+      $ref: ../../components/schemas/Id.yaml
+  - name: emoji
+    in: path
+    description: URL-encoded unicode emoji
+    required: true
+    schema:
+      type: string
+  responses:
+    '204':
+      description: ''

@@ -1,0 +1,23 @@
+# Generated from the backend handlers (utoipa). Do not edit; run `cargo run -- openapi` in backend/.
+type: object
+description: Effective permissions of the caller (schema name `Permissions`).
+required:
+- channels
+- server
+properties:
+  channels:
+    type: object
+    description: channel id -> permission bits
+    additionalProperties:
+      type: integer
+      format: int64
+      minimum: 0
+    propertyNames:
+      type: string
+      description: Snowflake ID (u64 encoded as a string)
+      examples:
+      - '160427101208920064'
+  server:
+    type: integer
+    format: int64
+    minimum: 0

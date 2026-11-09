@@ -1,0 +1,16 @@
+# Build output and dependencies
+backend/target/
+frontend/node_modules/
+frontend/dist/
+*.tsbuildinfo
+
+# Local environment and logs
+.env
+.env.*
+*.log
+
+# Editors and OS
+.idea/
+.vscode/
+*.swp
+.DS_Store

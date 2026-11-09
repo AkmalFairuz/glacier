@@ -1,0 +1,46 @@
+.content {
+  font-size: var(--chat-font-size, var(--text-md));
+  overflow-wrap: anywhere;
+}
+
+.text {
+  white-space: pre-wrap;
+}
+
+.content a {
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--accent) 40%, transparent);
+  text-underline-offset: 2px;
+}
+
+.inlineCode,
+.codeBlock {
+  font-family: var(--font-mono);
+  font-size: 0.87em;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg-sunken);
+}
+
+.inlineCode {
+  padding: 1px var(--space-1);
+}
+
+.codeBlock {
+  max-width: 100%;
+  margin: var(--space-1) 0;
+  padding: var(--space-2) var(--space-3);
+  overflow-x: auto;
+  white-space: pre;
+  line-height: 1.5;
+  tab-size: 4;
+}
+
+.edited {
+  font-size: var(--text-xs);
+  color: var(--text-faint);
+}
+
+.codeBlock code {
+  font: inherit;
+}

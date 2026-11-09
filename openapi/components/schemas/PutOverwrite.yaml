@@ -1,0 +1,17 @@
+# Generated from the backend handlers (utoipa). Do not edit; run `cargo run -- openapi` in backend/.
+type: object
+required:
+- target_type
+- allow
+- deny
+properties:
+  allow:
+    type: integer
+    format: int64
+    minimum: 0
+  deny:
+    type: integer
+    format: int64
+    minimum: 0
+  target_type:
+    $ref: ./TargetType.yaml

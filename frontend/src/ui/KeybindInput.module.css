@@ -1,0 +1,31 @@
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.capture {
+  min-width: 144px;
+  height: 32px;
+  padding: 0 var(--space-3);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  background: var(--bg-sunken);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    border-color var(--duration),
+    background-color var(--duration);
+}
+
+.capture:hover {
+  border-color: var(--gray-300);
+}
+
+.recording {
+  border-color: var(--accent);
+  background: var(--accent-subtle);
+  color: var(--accent);
+}

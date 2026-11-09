@@ -1,0 +1,41 @@
+.note {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.heading {
+  font-size: var(--text-sm);
+  font-weight: 700;
+}
+
+.input {
+  field-sizing: content;
+  /* One line is 20px + 5px padding each side + borders = 32px, so the placeholder sits centered. */
+  min-height: 32px;
+  max-height: 120px;
+  padding: 5px var(--space-2);
+  line-height: 20px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  font-size: var(--text-sm);
+  resize: none;
+  transition:
+    border-color var(--duration),
+    background-color var(--duration);
+}
+
+.input:hover {
+  background: var(--profile-inset);
+}
+
+.input:focus-visible {
+  outline: none;
+  border-color: var(--accent);
+  background: var(--bg-main);
+}
+
+.input::placeholder {
+  color: var(--text-faint);
+}

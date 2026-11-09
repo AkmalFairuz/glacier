@@ -1,0 +1,54 @@
+.composer {
+  flex-shrink: 0;
+  padding: 0 var(--space-4) var(--bottom-gap);
+}
+
+.box {
+  border: 1px solid transparent;
+  border-radius: var(--radius-lg);
+  background: var(--bg-sunken);
+  transition:
+    border-color var(--duration),
+    background-color var(--duration);
+}
+
+.box:focus-within {
+  border-color: var(--border-strong);
+  background: var(--bg-main);
+}
+
+.row {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-1);
+  min-height: var(--bottom-bar-height);
+  padding: 0 var(--space-2);
+}
+
+/* Icons sit 8px from the bottom: centered on one line, at the last line when it grows. */
+.row > :not(textarea) {
+  margin-block: var(--space-2);
+}
+
+.input {
+  flex: 1;
+  max-height: 240px;
+  padding: 13px var(--space-1);
+  line-height: 22px;
+  overflow-y: auto;
+}
+
+.error {
+  margin-top: var(--space-1);
+  font-size: var(--text-xs);
+  color: var(--danger);
+}
+
+.readonly {
+  margin: 0 var(--space-4);
+  padding: var(--space-3);
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}

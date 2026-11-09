@@ -1,0 +1,9 @@
+.home {
+  flex: 1;
+  min-width: 0;
+  background: var(--bg-main);
+}
+
+.top {
+  padding: var(--space-2);
+}

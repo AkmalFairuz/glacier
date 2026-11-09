@@ -1,0 +1,46 @@
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-2);
+  border-radius: var(--radius-md);
+  transition: background-color var(--duration);
+}
+
+.row:hover {
+  background: var(--bg-hover);
+}
+
+.name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  font-weight: 500;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.invite {
+  height: 30px;
+  padding: 0 var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--button-blue);
+  color: #fff;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  transition: background-color var(--duration);
+}
+
+.invite:hover:not(:disabled) {
+  background: var(--button-blue-hover);
+}
+
+.invite:disabled {
+  opacity: 0.55;
+}

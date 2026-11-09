@@ -1,0 +1,22 @@
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgb(13 19 23 / 0.55);
+  color: #fff;
+  font-size: 18px;
+  transition:
+    background-color var(--duration),
+    scale 80ms var(--ease-out);
+}
+
+.button:hover {
+  background: rgb(13 19 23 / 0.75);
+}
+
+.button:active {
+  scale: 0.92;
+}

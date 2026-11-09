@@ -1,0 +1,19 @@
+# Generated from the backend handlers (utoipa). Do not edit; run `cargo run -- openapi` in backend/.
+type: object
+properties:
+  description:
+    type:
+    - string
+    - 'null'
+  icon_url:
+    type:
+    - string
+    - 'null'
+  is_public:
+    type:
+    - boolean
+    - 'null'
+  name:
+    type:
+    - string
+    - 'null'

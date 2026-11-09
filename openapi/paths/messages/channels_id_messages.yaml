@@ -1,0 +1,61 @@
+# Generated from the backend handlers (utoipa). Do not edit; run `cargo run -- openapi` in backend/.
+get:
+  tags:
+  - messages
+  operationId: messages_list
+  parameters:
+  - name: id
+    in: path
+    required: true
+    schema:
+      $ref: ../../components/schemas/Id.yaml
+  - name: before
+    in: query
+    description: Return messages older than this id.
+    required: false
+    schema:
+      oneOf:
+      - type: 'null'
+      - $ref: ../../components/schemas/Id.yaml
+  - name: limit
+    in: query
+    description: 1-100, default 50.
+    required: false
+    schema:
+      type:
+      - integer
+      - 'null'
+      format: int32
+      minimum: 0
+  responses:
+    '200':
+      description: oldest to newest
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: ../../components/schemas/Message.yaml
+post:
+  tags:
+  - messages
+  operationId: messages_create
+  parameters:
+  - name: id
+    in: path
+    required: true
+    schema:
+      $ref: ../../components/schemas/Id.yaml
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/CreateMessage.yaml
+    required: true
+  responses:
+    '200':
+      description: ''
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/Message.yaml

@@ -1,0 +1,27 @@
+# Generated from the backend handlers (utoipa). Do not edit; run `cargo run -- openapi` in backend/.
+type: object
+required:
+- channel_id
+- deafened
+- muted
+- screen
+- server_id
+- user_id
+- video
+properties:
+  channel_id:
+    $ref: ./Id.yaml
+  deafened:
+    type: boolean
+  muted:
+    type: boolean
+  screen:
+    type: boolean
+  server_id:
+    oneOf:
+    - type: 'null'
+    - $ref: ./Id.yaml
+  user_id:
+    $ref: ./Id.yaml
+  video:
+    type: boolean

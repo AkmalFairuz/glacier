@@ -1,0 +1,16 @@
+# Generated from the backend handlers (utoipa). Do not edit; run `cargo run -- openapi` in backend/.
+type: object
+description: 'One entry of a bulk reorder: where a channel now sits.'
+required:
+- id
+- position
+properties:
+  id:
+    $ref: ./Id.yaml
+  parent_id:
+    oneOf:
+    - type: 'null'
+    - $ref: ./Id.yaml
+  position:
+    type: integer
+    format: int32

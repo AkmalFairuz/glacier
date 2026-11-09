@@ -1,0 +1,34 @@
+# Generated from the backend handlers (utoipa). Do not edit; run `cargo run -- openapi` in backend/.
+type: object
+required:
+- created_at
+- description
+- icon_url
+- id
+- is_public
+- member_count
+- name
+- owner_id
+properties:
+  created_at:
+    type: string
+    format: date-time
+  description:
+    type:
+    - string
+    - 'null'
+  icon_url:
+    type:
+    - string
+    - 'null'
+  id:
+    $ref: ./Id.yaml
+  is_public:
+    type: boolean
+  member_count:
+    type: integer
+    format: int64
+  name:
+    type: string
+  owner_id:
+    $ref: ./Id.yaml

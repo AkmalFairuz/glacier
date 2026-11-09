@@ -1,0 +1,41 @@
+# Generated from the backend handlers (utoipa). Do not edit; run `cargo run -- openapi` in backend/.
+type: object
+required:
+- code
+- created_at
+- expires_at
+- inviter
+- inviter_id
+- max_uses
+- server
+- uses
+properties:
+  code:
+    type: string
+  created_at:
+    type: string
+    format: date-time
+  expires_at:
+    type:
+    - string
+    - 'null'
+    format: date-time
+  inviter:
+    oneOf:
+    - type: 'null'
+    - $ref: ./User.yaml
+      description: Who created it; null if that account no longer exists.
+  inviter_id:
+    $ref: ./Id.yaml
+  max_uses:
+    type:
+    - integer
+    - 'null'
+    format: int32
+    minimum: 0
+  server:
+    $ref: ./Server.yaml
+  uses:
+    type: integer
+    format: int32
+    minimum: 0

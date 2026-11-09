@@ -1,0 +1,50 @@
+# Generated from the backend handlers (utoipa). Do not edit; run `cargo run -- openapi` in backend/.
+get:
+  tags:
+  - invites
+  operationId: invites_preview
+  parameters:
+  - name: code
+    in: path
+    required: true
+    schema:
+      type: string
+  responses:
+    '200':
+      description: ''
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/Invite.yaml
+  security:
+  - {}
+post:
+  tags:
+  - invites
+  operationId: invites_accept
+  parameters:
+  - name: code
+    in: path
+    required: true
+    schema:
+      type: string
+  responses:
+    '200':
+      description: ''
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/Server.yaml
+delete:
+  tags:
+  - invites
+  operationId: invites_delete
+  parameters:
+  - name: code
+    in: path
+    required: true
+    schema:
+      type: string
+  responses:
+    '204':
+      description: ''

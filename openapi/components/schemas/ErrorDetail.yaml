@@ -1,0 +1,11 @@
+# Generated from the backend handlers (utoipa). Do not edit; run `cargo run -- openapi` in backend/.
+type: object
+required:
+- code
+- message
+properties:
+  code:
+    type: string
+    description: bad_request, unauthorized, forbidden, not_found, conflict, rate_limited, payload_too_large, internal
+  message:
+    type: string
