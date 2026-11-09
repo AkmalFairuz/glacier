@@ -14,7 +14,7 @@ hex = "0.4"
 imagesize = "0.13"
 metrics = "0.24"
 metrics-exporter-prometheus = { version = "0.18", default-features = false }
-metrics-process = "2"
+metrics-process = { version = "2", features = ["use-gauge-on-cpu-seconds-total"] }
 rand = "0.8"
 redis = { version = "0.32", features = ["tokio-comp", "connection-manager"] }
 serde = { version = "1", features = ["derive"] }
