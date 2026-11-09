@@ -77,7 +77,7 @@ async fn with_recipients(state: &AppState, rows: Vec<ChannelRow>) -> AppResult<V
 
 pub async fn list(state: &AppState, user: Id) -> AppResult<Vec<Channel>> {
     let rows = sqlx::query_as::<_, ChannelRow>(
-        "SELECT c.id, c.server_id, c.type, c.name, c.topic, c.parent_id, c.position, c.user_limit, c.owner_id, c.last_message_id \
+        "SELECT c.id, c.server_id, c.type, c.name, c.topic, c.parent_id, c.position, c.user_limit, c.rate_limit_per_user, c.owner_id, c.last_message_id \
          FROM channels c JOIN dm_participants p ON p.channel_id = c.id AND p.user_id = ? \
          ORDER BY COALESCE(c.last_message_id, c.id) DESC",
     )

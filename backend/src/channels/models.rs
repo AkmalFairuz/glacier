@@ -40,8 +40,10 @@ pub struct ChannelRow {
     pub parent_id: Option<Id>,
     pub position: i32,
     pub user_limit: Option<u16>,
-    /// Defaulted so channel rows cached in Redis before this column existed still load.
+    /// Defaulted so channel rows cached in Redis before this column existed still load, and so a
+    /// query that lists columns by hand without it still works.
     #[serde(default)]
+    #[sqlx(default)]
     pub rate_limit_per_user: u32,
     pub owner_id: Option<Id>,
     pub last_message_id: Option<Id>,
