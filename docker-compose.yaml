@@ -117,8 +117,29 @@ services:
         condition: service_healthy
     restart: unless-stopped
 
+  # Monitoring. Prometheus and the exporters are internal; see monitoring/ for configuration.
+  prometheus:
+    image: prom/prometheus:v3.15.1
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.path=/prometheus
+      - --storage.tsdb.retention.time=15d
+    volumes:
+      - ./monitoring/prometheus:/etc/prometheus:ro
+      - prometheus:/prometheus
+    depends_on:
+      backend:
+        condition: service_started
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:9090/-/ready"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
 volumes:
   mariadb-primary:
   mariadb-replica:
   redis:
   minio:
+  prometheus:

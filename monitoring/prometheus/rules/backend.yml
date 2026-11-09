@@ -1,0 +1,40 @@
+groups:
+  - name: backend
+    rules:
+      - alert: BackendDown
+        expr: up{job="backend"} == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Backend replica {{ $labels.instance }} is not responding to scrapes"
+
+      - alert: BackendHighErrorRate
+        expr: |
+          sum(rate(glacier_http_requests_total{status=~"5.."}[5m]))
+            / sum(rate(glacier_http_requests_total[5m])) > 0.05
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "More than 5% of API requests are failing with 5xx"
+
+      - alert: BackendSlowRequests
+        # The gateway route is a long-lived WebSocket upgrade, so it is left out.
+        expr: |
+          histogram_quantile(0.95,
+            sum by (le) (rate(glacier_http_request_duration_seconds_bucket{route!="/gateway"}[5m]))) > 1
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "p95 API latency is above 1 second"
+
+      - alert: DatabasePoolSaturated
+        # Each pool allows 20 connections (backend/src/db.rs).
+        expr: max by (instance, pool) (glacier_db_pool_connections{state="in_use"}) >= 18
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "{{ $labels.pool }} pool on {{ $labels.instance }} is nearly exhausted"
