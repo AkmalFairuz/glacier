@@ -4,6 +4,7 @@ import { errorMessage } from '../../lib/api'
 import { messagesApi } from './api'
 import type { PendingUpload } from './AttachmentPicker'
 import { addMessage } from './cache'
+import { reply, useReply } from './replyStore'
 
 const TYPING_THROTTLE_MS = 8000
 
@@ -43,11 +44,13 @@ export function useComposer(channelId: string) {
       messagesApi.send(channelId, {
         content: text.trim(),
         attachment_ids: uploads.flatMap((u) => (u.attachment ? [u.attachment.id] : [])),
+        reply_to: useReply.getState()[channelId]?.id ?? null,
       }),
     onSuccess: (message) => {
       addMessage(qc, message)
       setText('')
       setUploads([])
+      reply.cancel(channelId)
       lastTyping.current = 0
     },
   })

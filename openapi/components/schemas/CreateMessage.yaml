@@ -7,3 +7,8 @@ properties:
       $ref: ./Id.yaml
   content:
     type: string
+  reply_to:
+    oneOf:
+    - type: 'null'
+    - $ref: ./Id.yaml
+      description: Id of a message in the same channel to reply to.

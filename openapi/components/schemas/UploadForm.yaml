@@ -1,6 +1,8 @@
 # Generated from the backend handlers (utoipa). Do not edit; run `cargo run -- openapi` in backend/.
 type: object
-description: multipart/form-data with a single `file` field.
+description: |-
+  multipart/form-data with a single `file` field.
+  Only describes the request body for OpenAPI; the handlers read the multipart stream directly.
 required:
 - file
 properties:

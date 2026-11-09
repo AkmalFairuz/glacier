@@ -97,3 +97,9 @@
     box-shadow: inset 2px 0 0 var(--accent);
   }
 }
+
+/* The message the composer is replying to. */
+.replyingTo {
+  background: var(--accent-subtle);
+  box-shadow: inset 2px 0 0 var(--accent);
+}

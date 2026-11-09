@@ -9,6 +9,8 @@ required:
 - edited_at
 - id
 - reactions
+- referenced_message
+- reply_to_id
 properties:
   attachments:
     type: array
@@ -34,3 +36,13 @@ properties:
     type: array
     items:
       $ref: ./Reaction.yaml
+  referenced_message:
+    oneOf:
+    - type: 'null'
+    - $ref: ./ReferencedMessage.yaml
+      description: The original message; `null` with `reply_to_id` set means it was deleted.
+  reply_to_id:
+    oneOf:
+    - type: 'null'
+    - $ref: ./Id.yaml
+      description: Set when this message is a reply, even if the original was deleted since.

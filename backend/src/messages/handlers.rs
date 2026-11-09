@@ -60,8 +60,24 @@ pub async fn create(
     if content.is_empty() && body.attachment_ids.is_empty() {
         return Err(AppError::bad("message cannot be empty"));
     }
+    if let Some(original) = body.reply_to {
+        // Must exist in this channel; read from the primary so a just-sent message can be replied to.
+        repo::author_of(&state, id, original)
+            .await
+            .map_err(|_| AppError::bad("the message you are replying to no longer exists"))?;
+    }
     ratelimit::check(&state, "message", &auth.id.to_string(), 10, 5).await?;
-    let message_id = repo::insert(&state, id, auth.id, &content, &body.attachment_ids).await?;
+    let message_id = repo::insert(
+        &state,
+        repo::NewMessage {
+            channel: id,
+            author: auth.id,
+            content: &content,
+            attachments: &body.attachment_ids,
+            reply_to: body.reply_to,
+        },
+    )
+    .await?;
     let message = repo::get(&state, id, message_id).await?;
     gateway::publish(&state, access.target(), Event::new("MESSAGE_CREATE", &message)).await;
     crate::reads::mark_read(&state, auth.id, id, access.channel.server_id, message_id).await?;

@@ -4,7 +4,8 @@ info:
   title: Glacier API
   description: REST API for Glacier. Realtime events are delivered over the WebSocket gateway at `/gateway?token=<token>` (not described here).
   license:
-    name: ''
+    name: MIT
+    identifier: MIT
   version: 0.1.0
 paths:
   /api/auth/login:
@@ -153,6 +154,8 @@ components:
       $ref: ./components/schemas/Reaction.yaml
     ReadReceipt:
       $ref: ./components/schemas/ReadReceipt.yaml
+    ReferencedMessage:
+      $ref: ./components/schemas/ReferencedMessage.yaml
     RegisterBody:
       $ref: ./components/schemas/RegisterBody.yaml
     RenameDm:

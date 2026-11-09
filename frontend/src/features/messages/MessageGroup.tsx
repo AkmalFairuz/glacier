@@ -8,6 +8,7 @@ import { Divider } from '../../ui/Divider'
 import type { MessageBlock } from './grouping'
 import { isFresh } from './freshMessages'
 import { MessageItem, type MessagePerms } from './MessageItem'
+import { ReplyPreview } from './ReplyPreview'
 import s from './MessageGroup.module.css'
 
 type Props = { block: MessageBlock; meId: string | undefined; perms: MessagePerms }
@@ -23,6 +24,7 @@ export function MessageGroup({ block, meId, perms }: Props) {
       {block.day && <Divider label={formatDay(block.day)} />}
       {block.unread && <Divider label="New messages" tone="danger" />}
       <article className={isFresh(first.id) ? `${s.group} ${s.fresh}` : s.group}>
+        {first.reply_to_id && <ReplyPreview message={first} />}
         <button type="button" className={s.avatar} aria-label={`View ${author.display_name}’s profile`} onClick={openProfile}>
           <Avatar name={author.display_name} src={author.avatar_url} seed={author.id} />
         </button>

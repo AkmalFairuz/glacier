@@ -22,12 +22,26 @@ pub struct Reaction {
     pub user_ids: Vec<Id>,
 }
 
+/// Compact copy of the message a reply points at.
+#[derive(Clone, Debug, Serialize, ToSchema)]
+pub struct ReferencedMessage {
+    pub id: Id,
+    pub author: User,
+    /// The first 200 characters.
+    pub content: String,
+    pub has_attachments: bool,
+}
+
 #[derive(Clone, Debug, Serialize, ToSchema)]
 pub struct Message {
     pub id: Id,
     pub channel_id: Id,
     pub author: User,
     pub content: String,
+    /// Set when this message is a reply, even if the original was deleted since.
+    pub reply_to_id: Option<Id>,
+    /// The original message; `null` with `reply_to_id` set means it was deleted.
+    pub referenced_message: Option<ReferencedMessage>,
     pub attachments: Vec<Attachment>,
     pub reactions: Vec<Reaction>,
     pub edited_at: Option<DateTime<Utc>>,
@@ -40,6 +54,7 @@ pub struct MessageRow {
     pub channel_id: Id,
     pub author_id: Id,
     pub content: String,
+    pub reply_to_id: Option<Id>,
     pub edited_at: Option<DateTime<Utc>>,
     pub created_at: DateTime<Utc>,
 }
@@ -58,6 +73,9 @@ pub struct CreateMessage {
     pub content: String,
     #[serde(default)]
     pub attachment_ids: Vec<Id>,
+    /// Id of a message in the same channel to reply to.
+    #[serde(default)]
+    pub reply_to: Option<Id>,
 }
 
 #[derive(Deserialize, ToSchema)]

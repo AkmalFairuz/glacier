@@ -17,6 +17,8 @@ export function groupMessages(messages: Message[], unreadFrom?: string): Message
       previous &&
       !newDay &&
       !startsUnread &&
+      // A reply starts its own group so the quoted line sits above the author.
+      !message.reply_to_id &&
       previous.author.id === message.author.id &&
       new Date(message.created_at).getTime() - new Date(previous.created_at).getTime() < GROUP_WINDOW_MS
     if (sameRun) blocks[blocks.length - 1].messages.push(message)

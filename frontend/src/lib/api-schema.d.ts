@@ -746,6 +746,7 @@ export interface components {
         CreateMessage: {
             attachment_ids?: components["schemas"]["Id"][];
             content?: string;
+            reply_to?: null | components["schemas"]["Id"];
         };
         CreateRole: {
             /** Format: int32 */
@@ -823,6 +824,8 @@ export interface components {
             edited_at: string | null;
             id: components["schemas"]["Id"];
             reactions: components["schemas"]["Reaction"][];
+            referenced_message: null | components["schemas"]["ReferencedMessage"];
+            reply_to_id: null | components["schemas"]["Id"];
         };
         NoteBody: {
             /** @description Empty clears the note. */
@@ -860,6 +863,14 @@ export interface components {
         ReadReceipt: {
             last_read_message_id: components["schemas"]["Id"];
             user_id: components["schemas"]["Id"];
+        };
+        /** @description Compact copy of the message a reply points at. */
+        ReferencedMessage: {
+            author: components["schemas"]["User"];
+            /** @description The first 200 characters. */
+            content: string;
+            has_attachments: boolean;
+            id: components["schemas"]["Id"];
         };
         RegisterBody: {
             display_name?: string | null;
@@ -949,7 +960,10 @@ export interface components {
             bio?: string | null;
             display_name?: string | null;
         };
-        /** @description multipart/form-data with a single `file` field. */
+        /**
+         * @description multipart/form-data with a single `file` field.
+         *     Only describes the request body for OpenAPI; the handlers read the multipart stream directly.
+         */
         UploadForm: {
             /** Format: binary */
             file: string;

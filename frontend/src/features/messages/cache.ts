@@ -22,12 +22,32 @@ export function addMessage(qc: QueryClient, message: Message) {
   })
 }
 
+/** Applies `fn` to the quoted copy in every loaded reply to `originalId`. */
+const mapReplies = (pages: Message[][], originalId: string, fn: (ref: Message['referenced_message']) => Message['referenced_message']) =>
+  pages.map((page) =>
+    page.some((m) => m.reply_to_id === originalId)
+      ? page.map((m) => (m.reply_to_id === originalId ? { ...m, referenced_message: fn(m.referenced_message) } : m))
+      : page,
+  )
+
 export function updateMessage(qc: QueryClient, message: Message) {
-  patch(qc, message.channel_id, (pages) => mapMessage(pages, message.id, () => message))
+  patch(qc, message.channel_id, (pages) =>
+    mapReplies(
+      mapMessage(pages, message.id, () => message),
+      message.id,
+      (ref) => ref && { ...ref, content: message.content.slice(0, 200), has_attachments: message.attachments.length > 0 },
+    ),
+  )
 }
 
 export function deleteMessage(qc: QueryClient, channelId: string, id: string) {
-  patch(qc, channelId, (pages) => pages.map((page) => page.filter((m) => m.id !== id)))
+  patch(qc, channelId, (pages) =>
+    mapReplies(
+      pages.map((page) => page.filter((m) => m.id !== id)),
+      id,
+      () => null,
+    ),
+  )
 }
 
 export function applyReaction(qc: QueryClient, e: ReactionEvent, added: boolean) {

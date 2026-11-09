@@ -60,7 +60,7 @@ export function ChannelPage() {
             placeholder={`Message #${name}`}
             canSend={can(perms, Perm.SEND_MESSAGES)}
             canAttach={can(perms, Perm.ATTACH_FILES)}
-            perms={{ canReact: can(perms, Perm.ADD_REACTIONS), canManage: can(perms, Perm.MANAGE_MESSAGES) }}
+            perms={{ canReact: can(perms, Perm.ADD_REACTIONS), canManage: can(perms, Perm.MANAGE_MESSAGES), canSend: can(perms, Perm.SEND_MESSAGES) }}
           />
         )}
         {searching ? <SearchPanel /> : !isVoice && membersOpen && serverId && <MemberList serverId={serverId} />}

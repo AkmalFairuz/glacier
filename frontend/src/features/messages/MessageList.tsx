@@ -8,6 +8,8 @@ import { useAutoAck } from '../reads/useAutoAck'
 import { useSeen } from '../reads/useSeen'
 import { Spinner } from '../../ui/Spinner'
 import { useMe } from '../auth/useSession'
+import { search, useSearch } from '../search/searchStore'
+import { toast } from '../../ui/toast'
 import { groupMessages } from './grouping'
 import { useMessages } from './hooks'
 import { MessageGroup } from './MessageGroup'
@@ -46,6 +48,25 @@ export function MessageList({ channelId, title, intro, perms }: Props) {
     reads.setRead(channelId, head)
     void readsApi.ack(channelId, head)
   }
+
+  // Jumping to a message that isn't loaded yet (reply preview or search result): page back until it is.
+  const jumpTarget = useSearch((st) => (st.highlight?.channelId === channelId ? st.highlight.messageId : null))
+  const reached = useRef<string | null>(null)
+  useEffect(() => {
+    if (!jumpTarget || jumpTarget === reached.current || isLoading || isFetchingNextPage) return
+    if (messages.some((m) => m.id === jumpTarget)) {
+      // Found; if it is deleted while still highlighted, that is not a failed jump.
+      reached.current = jumpTarget
+      return
+    }
+    const oldest = messages[0]?.id
+    if (hasNextPage && oldest && compareIds(jumpTarget, oldest) < 0) {
+      void fetchNextPage()
+      return
+    }
+    toast.info('That message is no longer available')
+    search.clearHighlight()
+  }, [jumpTarget, messages, hasNextPage, isLoading, isFetchingNextPage, fetchNextPage])
 
   useEffect(() => {
     const el = sentinel.current

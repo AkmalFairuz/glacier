@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { LuSendHorizontal, LuSmile } from 'react-icons/lu'
+import { LuSendHorizontal, LuSmile, LuX } from 'react-icons/lu'
 import { errorMessage } from '../../lib/api'
 import { IconButton } from '../../ui/IconButton'
 import { TextArea } from '../../ui/TextArea'
@@ -7,6 +7,7 @@ import { useMenu } from '../../ui/useMenu'
 import { AttachButton, PendingUploads } from './AttachmentPicker'
 import { EmojiPicker } from '../emoji/EmojiPicker'
 import { useComposer } from './useComposer'
+import { reply, useReply } from './replyStore'
 import s from './Composer.module.css'
 
 type Props = { channelId: string; placeholder: string; canSend: boolean; canAttach: boolean }
@@ -15,6 +16,12 @@ export function Composer({ channelId, placeholder, canSend, canAttach }: Props) 
   const composer = useComposer(channelId)
   const textarea = useRef<HTMLTextAreaElement>(null)
   const emoji = useMenu()
+  const replyTo = useReply((st) => st[channelId])
+
+  // Starting a reply puts the cursor in the composer.
+  useEffect(() => {
+    if (replyTo) textarea.current?.focus()
+  }, [replyTo])
 
   useEffect(() => {
     if (!composer.text && textarea.current) textarea.current.style.height = ''
@@ -39,6 +46,14 @@ export function Composer({ channelId, placeholder, canSend, canAttach }: Props) 
   return (
     <form className={s.composer} onSubmit={submit}>
       <div className={s.box}>
+        {replyTo && (
+          <div className={s.replyBar}>
+            <span className={s.replyLabel}>
+              Replying to <strong>{replyTo.author.display_name}</strong>
+            </span>
+            <IconButton size="sm" label="Cancel reply" icon={<LuX />} onClick={() => reply.cancel(channelId)} />
+          </div>
+        )}
         <PendingUploads uploads={composer.uploads} onRemove={composer.removeUpload} />
         <div className={s.row}>
           {canAttach && <AttachButton onFiles={composer.addFiles} />}
@@ -59,6 +74,7 @@ export function Composer({ channelId, placeholder, canSend, canAttach }: Props) 
             onPaste={(e) => canAttach && e.clipboardData.files.length > 0 && composer.addFiles([...e.clipboardData.files])}
             onKeyDown={(e) => {
               if (e.key === 'Enter' && !e.shiftKey && !e.nativeEvent.isComposing) submit(e)
+              if (e.key === 'Escape' && replyTo) reply.cancel(channelId)
             }}
           />
           <IconButton label="Insert emoji" icon={<LuSmile />} onClick={emoji.openBelow} />

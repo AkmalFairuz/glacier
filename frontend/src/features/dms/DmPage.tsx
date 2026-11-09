@@ -9,7 +9,7 @@ import { DmHeader } from './DmHeader'
 import { useDms, useDmTitle } from './hooks'
 import s from './DmPage.module.css'
 
-const DM_PERMS = { canReact: true, canManage: false }
+const DM_PERMS = { canReact: true, canManage: false, canSend: true }
 
 export function DmPage() {
   const { channelId } = useParams()

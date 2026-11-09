@@ -8,9 +8,10 @@ use crate::id::Id;
 use crate::state::AppState;
 use crate::users;
 
-use super::models::{Attachment, Message, MessageRow, Reaction};
+use super::models::{Attachment, Message, MessageRow, Reaction, ReferencedMessage};
 
-const COLUMNS: &str = "id, channel_id, author_id, content, edited_at, created_at";
+const COLUMNS: &str = "id, channel_id, author_id, content, reply_to_id, edited_at, created_at";
+const EXCERPT_CHARS: usize = 200;
 
 fn placeholders(n: usize) -> String {
     vec!["?"; n].join(",")
@@ -22,7 +23,9 @@ pub async fn hydrate(state: &AppState, pool: &MySqlPool, rows: Vec<MessageRow>) 
         return Ok(vec![]);
     }
     let ids: Vec<Id> = rows.iter().map(|r| r.id).collect();
+    let referenced = referenced_rows(pool, &rows).await?;
     let mut author_ids: Vec<Id> = rows.iter().map(|r| r.author_id).collect();
+    author_ids.extend(referenced.values().map(|r| r.author_id));
     author_ids.sort();
     author_ids.dedup();
     let authors: HashMap<Id, users::User> = users::repo::get_many(state, &author_ids)
@@ -75,8 +78,19 @@ pub async fn hydrate(state: &AppState, pool: &MySqlPool, rows: Vec<MessageRow>) 
     Ok(rows
         .into_iter()
         .filter_map(|r| {
+            let referenced_message = r.reply_to_id.and_then(|id| {
+                let original = referenced.get(&id)?;
+                Some(ReferencedMessage {
+                    id,
+                    author: authors.get(&original.author_id)?.clone(),
+                    content: original.content.chars().take(EXCERPT_CHARS).collect(),
+                    has_attachments: original.has_attachments,
+                })
+            });
             Some(Message {
                 author: authors.get(&r.author_id)?.clone(),
+                reply_to_id: r.reply_to_id,
+                referenced_message,
                 attachments: attachments.remove(&r.id).unwrap_or_default(),
                 reactions: reactions.remove(&r.id).unwrap_or_default(),
                 id: r.id,
@@ -85,6 +99,46 @@ pub async fn hydrate(state: &AppState, pool: &MySqlPool, rows: Vec<MessageRow>) 
                 edited_at: r.edited_at,
                 created_at: r.created_at,
             })
+        })
+        .collect())
+}
+
+struct ReferencedRow {
+    author_id: Id,
+    content: String,
+    has_attachments: bool,
+}
+
+/// The originals that `rows` reply to, by id. Deleted originals are simply missing.
+async fn referenced_rows(pool: &MySqlPool, rows: &[MessageRow]) -> AppResult<HashMap<Id, ReferencedRow>> {
+    let mut ids: Vec<Id> = rows.iter().filter_map(|r| r.reply_to_id).collect();
+    ids.sort();
+    ids.dedup();
+    if ids.is_empty() {
+        return Ok(HashMap::new());
+    }
+    let sql = format!(
+        "SELECT m.id, m.author_id, LEFT(m.content, {EXCERPT_CHARS}), \
+         EXISTS (SELECT 1 FROM attachments a WHERE a.message_id = m.id) \
+         FROM messages m WHERE m.id IN ({})",
+        placeholders(ids.len())
+    );
+    let mut q = sqlx::query_as::<_, (Id, Id, String, bool)>(&sql);
+    for id in &ids {
+        q = q.bind(*id);
+    }
+    Ok(q.fetch_all(pool)
+        .await?
+        .into_iter()
+        .map(|(id, author_id, content, has_attachments)| {
+            (
+                id,
+                ReferencedRow {
+                    author_id,
+                    content,
+                    has_attachments,
+                },
+            )
         })
         .collect())
 }
@@ -127,17 +181,35 @@ pub async fn author_of(state: &AppState, channel: Id, id: Id) -> AppResult<Id> {
     row.map(|(a,)| a).ok_or(AppError::NotFound("message"))
 }
 
-pub async fn insert(state: &AppState, channel: Id, author: Id, content: &str, attachments: &[Id]) -> AppResult<Id> {
+pub struct NewMessage<'a> {
+    pub channel: Id,
+    pub author: Id,
+    pub content: &'a str,
+    pub attachments: &'a [Id],
+    pub reply_to: Option<Id>,
+}
+
+pub async fn insert(state: &AppState, new: NewMessage<'_>) -> AppResult<Id> {
+    let NewMessage {
+        channel,
+        author,
+        content,
+        attachments,
+        reply_to,
+    } = new;
     let id = state.ids.next();
     let mut tx = state.db.writer.begin().await?;
-    sqlx::query("INSERT INTO messages (id, channel_id, author_id, content, created_at) VALUES (?, ?, ?, ?, ?)")
-        .bind(id)
-        .bind(channel)
-        .bind(author)
-        .bind(content)
-        .bind(Utc::now())
-        .execute(&mut *tx)
-        .await?;
+    sqlx::query(
+        "INSERT INTO messages (id, channel_id, author_id, content, reply_to_id, created_at) VALUES (?, ?, ?, ?, ?, ?)",
+    )
+    .bind(id)
+    .bind(channel)
+    .bind(author)
+    .bind(content)
+    .bind(reply_to)
+    .bind(Utc::now())
+    .execute(&mut *tx)
+    .await?;
     for att in attachments {
         let res = sqlx::query(
             "UPDATE attachments SET message_id = ? WHERE id = ? AND channel_id = ? AND uploader_id = ? AND message_id IS NULL",

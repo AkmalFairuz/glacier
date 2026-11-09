@@ -1,0 +1,18 @@
+# Generated from the backend handlers (utoipa). Do not edit; run `cargo run -- openapi` in backend/.
+type: object
+description: Compact copy of the message a reply points at.
+required:
+- id
+- author
+- content
+- has_attachments
+properties:
+  author:
+    $ref: ./User.yaml
+  content:
+    type: string
+    description: The first 200 characters.
+  has_attachments:
+    type: boolean
+  id:
+    $ref: ./Id.yaml

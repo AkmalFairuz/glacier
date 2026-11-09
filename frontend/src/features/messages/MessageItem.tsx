@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useEffect, useRef, useState } from 'react'
-import { LuPencil, LuSmilePlus, LuTrash2 } from 'react-icons/lu'
+import { LuPencil, LuReply, LuSmilePlus, LuTrash2 } from 'react-icons/lu'
 import { formatFull } from '../../lib/format'
 import { useTimeFormat } from '../settings/useTimeFormat'
 import type { Message } from '../../lib/types'
@@ -15,10 +15,11 @@ import { search, useSearch } from '../search/searchStore'
 import { isFresh } from './freshMessages'
 import { MessageEditor } from './MessageEditor'
 import { ReactionBar } from './ReactionBar'
+import { reply, useReply } from './replyStore'
 import s from './MessageItem.module.css'
 import { confirmDialog } from '../../ui/confirm'
 
-export type MessagePerms = { canReact: boolean; canManage: boolean }
+export type MessagePerms = { canReact: boolean; canManage: boolean; canSend: boolean }
 
 type Props = { message: Message; meId: string | undefined; perms: MessagePerms; compact: boolean }
 
@@ -29,6 +30,7 @@ export function MessageItem({ message, meId, perms, compact }: Props) {
   const formatTime = useTimeFormat()
   const [fresh] = useState(() => isFresh(message.id))
   const highlighted = useSearch((st) => st.highlight?.messageId === message.id)
+  const replyingTo = useReply((st) => st[message.channel_id]?.id === message.id)
   const ref = useRef<HTMLDivElement>(null)
   useEffect(() => {
     if (!highlighted) return
@@ -45,7 +47,7 @@ export function MessageItem({ message, meId, perms, compact }: Props) {
     void (active ? messagesApi.unreact(message.channel_id, message.id, emoji) : messagesApi.react(message.channel_id, message.id, emoji))
 
   return (
-    <div ref={ref} tabIndex={-1} className={[s.item, fresh && s.fresh, highlighted && s.highlighted].filter(Boolean).join(' ')}>
+    <div ref={ref} tabIndex={-1} className={[s.item, fresh && s.fresh, highlighted && s.highlighted, replyingTo && s.replyingTo].filter(Boolean).join(' ')}>
       {compact && (
         <time className={s.gutterTime} dateTime={message.created_at} title={formatFull(message.created_at)}>
           {formatTime(message.created_at)}
@@ -66,6 +68,7 @@ export function MessageItem({ message, meId, perms, compact }: Props) {
       <ReactionBar reactions={message.reactions} meId={meId} canReact={perms.canReact} onToggle={toggleReaction} />
       <div className={s.actions} role="toolbar" aria-label="Message actions">
         {perms.canReact && <IconButton size="sm" label="Add reaction" icon={<LuSmilePlus />} onClick={picker.openBelow} />}
+        {perms.canSend && <IconButton size="sm" label="Reply" icon={<LuReply />} onClick={() => reply.start(message)} />}
         {isMine && <IconButton size="sm" label="Edit" icon={<LuPencil />} onClick={() => setEditing(true)} />}
         {(isMine || perms.canManage) && (
           <IconButton

@@ -70,7 +70,7 @@ async fn run(state: &AppState, channel_ids: &[Id], p: &SearchQuery) -> AppResult
         });
     }
     let mut qb: QueryBuilder<MySql> =
-        QueryBuilder::new("SELECT m.id, m.channel_id, m.author_id, m.content, m.edited_at, m.created_at FROM messages m WHERE m.channel_id IN (");
+        QueryBuilder::new("SELECT m.id, m.channel_id, m.author_id, m.content, m.reply_to_id, m.edited_at, m.created_at FROM messages m WHERE m.channel_id IN (");
     let mut sep = qb.separated(", ");
     for id in channel_ids {
         sep.push_bind(*id);
