@@ -68,6 +68,8 @@ services:
     environment:
       MINIO_ROOT_USER: glacier
       MINIO_ROOT_PASSWORD: glacier-secret
+      # Lets Prometheus scrape /minio/v2/metrics/cluster without a token (port 9000 is internal).
+      MINIO_PROMETHEUS_AUTH_TYPE: public
     volumes:
       - minio:/data
     healthcheck:
@@ -135,6 +137,59 @@ services:
       interval: 10s
       timeout: 5s
       retries: 10
+    restart: unless-stopped
+
+  # Creates the read-only monitoring user on the primary; it reaches the replica through replication.
+  mariadb-monitor-user:
+    image: mariadb:11.4
+    command:
+      - mariadb
+      - --host=mariadb-primary
+      - --user=root
+      - --password=glacier-root
+      - --execute=CREATE USER IF NOT EXISTS 'exporter'@'%' IDENTIFIED BY 'exporter-pass' WITH MAX_USER_CONNECTIONS 3; GRANT PROCESS, BINLOG MONITOR, REPLICA MONITOR, SELECT ON *.* TO 'exporter'@'%';
+    depends_on:
+      mariadb-primary:
+        condition: service_healthy
+    restart: "no"
+
+  mysqld-exporter-primary:
+    image: prom/mysqld-exporter:v0.21.0
+    command: ["--mysqld.address=mariadb-primary:3306", "--mysqld.username=exporter"]
+    environment:
+      MYSQLD_EXPORTER_PASSWORD: exporter-pass
+    depends_on:
+      mariadb-monitor-user:
+        condition: service_completed_successfully
+    restart: unless-stopped
+
+  mysqld-exporter-replica:
+    image: prom/mysqld-exporter:v0.21.0
+    command: ["--mysqld.address=mariadb-replica:3306", "--mysqld.username=exporter"]
+    environment:
+      MYSQLD_EXPORTER_PASSWORD: exporter-pass
+    depends_on:
+      mariadb-replica:
+        condition: service_healthy
+      mariadb-monitor-user:
+        condition: service_completed_successfully
+    restart: unless-stopped
+
+  redis-exporter:
+    image: oliver006/redis_exporter:v1.95.0
+    environment:
+      REDIS_ADDR: redis://redis:6379
+    depends_on:
+      redis:
+        condition: service_healthy
+    restart: unless-stopped
+
+  nginx-exporter:
+    image: nginx/nginx-prometheus-exporter:1.5.3
+    command: ["--nginx.scrape-uri=http://nginx:8081/stub_status"]
+    depends_on:
+      nginx:
+        condition: service_started
     restart: unless-stopped
 
 volumes:

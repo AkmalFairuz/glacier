@@ -19,3 +19,25 @@ scrape_configs:
         type: A
         port: 3000
         refresh_interval: 15s
+
+  - job_name: mariadb
+    static_configs:
+      - targets: ["mysqld-exporter-primary:9104"]
+        labels:
+          role: primary
+      - targets: ["mysqld-exporter-replica:9104"]
+        labels:
+          role: replica
+
+  - job_name: redis
+    static_configs:
+      - targets: ["redis-exporter:9121"]
+
+  - job_name: nginx
+    static_configs:
+      - targets: ["nginx-exporter:9113"]
+
+  - job_name: minio
+    metrics_path: /minio/v2/metrics/cluster
+    static_configs:
+      - targets: ["minio:9000"]

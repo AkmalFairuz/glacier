@@ -1,0 +1,53 @@
+groups:
+  - name: services
+    rules:
+      - alert: TargetDown
+        # Exporters and services other than the backend (BackendDown covers those).
+        expr: up{job!="backend"} == 0
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "{{ $labels.job }} target {{ $labels.instance }} is down"
+
+      - alert: MariaDBDown
+        expr: mysql_up == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "MariaDB {{ $labels.role }} is not accepting connections"
+
+      - alert: MariaDBReplicationStopped
+        expr: |
+          mysql_slave_status_slave_io_running{role="replica"} == 0
+            or mysql_slave_status_slave_sql_running{role="replica"} == 0
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "MariaDB replication has stopped; listing reads may be stale"
+
+      - alert: MariaDBReplicationLag
+        expr: mysql_slave_status_seconds_behind_master{role="replica"} > 30
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "MariaDB replica is {{ $value }}s behind the primary"
+
+      - alert: RedisDown
+        expr: redis_up == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Redis is down; sessions, rate limits and realtime events are affected"
+
+      - alert: NginxDown
+        expr: nginx_up == 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "nginx stub_status is not reachable"
