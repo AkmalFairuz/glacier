@@ -2,6 +2,7 @@ use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use utoipa::ToSchema;
 
+use crate::gateway::presence::{CustomStatus, Status};
 use crate::id::Id;
 use crate::users::User;
 
@@ -12,7 +13,10 @@ pub struct Member {
     pub nickname: Option<String>,
     pub role_ids: Vec<Id>,
     pub joined_at: DateTime<Utc>,
+    /// Same as `status != offline`.
     pub online: bool,
+    pub status: Status,
+    pub custom_status: Option<CustomStatus>,
 }
 
 #[derive(Deserialize, ToSchema)]

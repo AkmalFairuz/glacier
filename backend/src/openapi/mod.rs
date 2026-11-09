@@ -20,7 +20,7 @@ use crate::{auth, channels, dms, error, id, invites, members, messages, reads, r
         auth::handlers::register, auth::handlers::login, auth::handlers::logout,
         auth::handlers::change_password, auth::handlers::revoke_other_sessions,
         users::handlers::me, users::handlers::update_me, users::handlers::search, users::handlers::ice_config,
-        users::handlers::profile, users::handlers::set_note,
+        users::handlers::profile, users::handlers::set_note, users::handlers::update_presence,
         servers::handlers::list, servers::handlers::create, servers::handlers::discover, servers::handlers::get,
         servers::handlers::update, servers::handlers::delete, servers::handlers::join, servers::handlers::my_permissions,
         members::handlers::list, members::handlers::update, members::handlers::remove,

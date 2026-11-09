@@ -3,6 +3,7 @@ import { queryClient } from '../../lib/queryClient'
 import type { Channel, Message, User } from '../../lib/types'
 import { settings } from './settingsStore'
 import { playSound } from './sounds'
+import { useMyPresence } from '../members/presenceStore'
 
 export const notificationsSupported = typeof Notification !== 'undefined'
 
@@ -12,7 +13,8 @@ export const notificationPermission = (): NotificationPermission | 'unsupported'
 export function notifyMessage(message: Message) {
   const s = settings.get()
   const me = queryClient.getQueryData<User>(keys.me)
-  if (s.notifyLevel === 'none' || message.author.id === me?.id) return
+  // Do Not Disturb silences message sounds and desktop notifications.
+  if (s.notifyLevel === 'none' || message.author.id === me?.id || useMyPresence.getState().status === 'dnd') return
   const dm = queryClient.getQueryData<Channel[]>(keys.dms)?.find((c) => c.id === message.channel_id)
   if (s.notifyLevel === 'dms' && !dm) return
   const viewing = document.hasFocus() && !document.hidden && location.pathname.endsWith(`/${message.channel_id}`)

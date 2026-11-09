@@ -38,9 +38,19 @@ pub struct SearchQuery {
 #[derive(Serialize, ToSchema)]
 pub struct UserProfile {
     pub user: User,
+    pub presence: crate::gateway::presence::Presence,
     pub mutual_servers: Vec<crate::servers::Server>,
     /// Only visible to the caller.
     pub note: Option<String>,
+}
+
+#[derive(Deserialize, ToSchema)]
+pub struct UpdatePresence {
+    /// Omit to keep the current status.
+    pub status: Option<crate::gateway::presence::StatusSetting>,
+    /// `null` clears the custom status; omit to keep it.
+    #[serde(default, deserialize_with = "crate::serde_util::double_option")]
+    pub custom_status: Option<Option<crate::gateway::presence::CustomStatus>>,
 }
 
 #[derive(Deserialize, ToSchema)]

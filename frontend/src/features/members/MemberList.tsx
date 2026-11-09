@@ -41,7 +41,7 @@ export function MemberList({ serverId }: { serverId: string }) {
   const { data: roles = [] } = useRoles(serverId)
   const server = useServer(serverId)
   const presence = usePresence()
-  const isOnline = (m: Member) => presence[m.user.id] ?? m.online
+  const isOnline = (m: Member) => (presence[m.user.id]?.status ?? m.status) !== 'offline'
 
   return (
     <aside className={s.list} aria-label="Members">

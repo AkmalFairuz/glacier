@@ -2,7 +2,8 @@ import { useEffect, useId, useLayoutEffect, useRef, useState, type KeyboardEvent
 import { LuCheck, LuChevronRight } from 'react-icons/lu'
 import s from './Menu.module.css'
 
-type Action = { label: string; icon?: ReactNode; onSelect: () => void; danger?: boolean; checked?: boolean; disabled?: boolean }
+/** `checked` makes a checkbox item that stays open; `selected` makes a radio item (one of a set) that closes. */
+type Action = { label: string; icon?: ReactNode; onSelect: () => void; danger?: boolean; checked?: boolean; selected?: boolean; disabled?: boolean }
 type Submenu = { label: string; icon?: ReactNode; submenu: MenuEntry[] }
 
 export type MenuEntry = Action | Submenu | { heading: string } | 'divider'
@@ -127,12 +128,13 @@ function MenuList({ anchor, items, onClose, onCloseAll, label, tree, focusFirst,
           )
         }
         const checkable = item.checked !== undefined
+        const radio = item.selected !== undefined
         return (
           <li key={i} role="none">
             <button
               type="button"
-              role={checkable ? 'menuitemcheckbox' : 'menuitem'}
-              aria-checked={checkable ? item.checked : undefined}
+              role={checkable ? 'menuitemcheckbox' : radio ? 'menuitemradio' : 'menuitem'}
+              aria-checked={checkable ? item.checked : radio ? item.selected : undefined}
               disabled={item.disabled}
               className={item.danger ? `${s.item} ${s.danger}` : s.item}
               onMouseEnter={() => setSub(null)}
@@ -143,6 +145,7 @@ function MenuList({ anchor, items, onClose, onCloseAll, label, tree, focusFirst,
             >
               <span className={s.icon}>{checkable ? item.checked && <LuCheck /> : item.icon}</span>
               {item.label}
+              {item.selected && <LuCheck className={s.chevron} aria-hidden="true" />}
             </button>
           </li>
         )

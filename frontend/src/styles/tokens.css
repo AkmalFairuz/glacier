@@ -113,6 +113,8 @@
   --strata-5: light-dark(#2c6a8c, #2f5a76);
 
   --online: light-dark(#3f7d55, #74b88f);
+  --idle: light-dark(#a87b0c, #e3b341);
+  --dnd: light-dark(#c4402f, #ec6b5b);
 
   --overlay: light-dark(rgb(13 19 23 / 0.45), rgb(0 0 0 / 0.6));
   --shadow-near: light-dark(rgb(13 19 23 / 0.08), rgb(0 0 0 / 0.3));

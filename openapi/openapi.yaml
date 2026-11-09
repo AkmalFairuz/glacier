@@ -84,6 +84,8 @@ paths:
     $ref: ./paths/uploads/uploads_image.yaml
   /api/users/@me:
     $ref: ./paths/users/users_me.yaml
+  /api/users/@me/presence:
+    $ref: ./paths/users/users_me_presence.yaml
   /api/users/search:
     $ref: ./paths/users/users_search.yaml
   /api/users/{id}/note:
@@ -122,6 +124,8 @@ components:
       $ref: ./components/schemas/CreateRole.yaml
     CreateServer:
       $ref: ./components/schemas/CreateServer.yaml
+    CustomStatus:
+      $ref: ./components/schemas/CustomStatus.yaml
     EditMessage:
       $ref: ./components/schemas/EditMessage.yaml
     ErrorBody:
@@ -148,6 +152,10 @@ components:
       $ref: ./components/schemas/Overwrite.yaml
     Permissions:
       $ref: ./components/schemas/Permissions.yaml
+    Presence:
+      $ref: ./components/schemas/Presence.yaml
+    PresenceSettings:
+      $ref: ./components/schemas/PresenceSettings.yaml
     PutOverwrite:
       $ref: ./components/schemas/PutOverwrite.yaml
     Reaction:
@@ -170,12 +178,18 @@ components:
       $ref: ./components/schemas/Server.yaml
     ServerTemplate:
       $ref: ./components/schemas/ServerTemplate.yaml
+    Status:
+      $ref: ./components/schemas/Status.yaml
+    StatusSetting:
+      $ref: ./components/schemas/StatusSetting.yaml
     TargetType:
       $ref: ./components/schemas/TargetType.yaml
     UpdateChannel:
       $ref: ./components/schemas/UpdateChannel.yaml
     UpdateMember:
       $ref: ./components/schemas/UpdateMember.yaml
+    UpdatePresence:
+      $ref: ./components/schemas/UpdatePresence.yaml
     UpdateRole:
       $ref: ./components/schemas/UpdateRole.yaml
     UpdateServer:

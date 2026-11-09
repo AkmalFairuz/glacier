@@ -31,18 +31,20 @@ async fn assemble(
     for (user, role) in role_rows {
         roles.entry(user).or_default().push(role);
     }
-    let online = presence::online_many(state, &ids).await?;
+    let presence = presence::presence_many(state, pool, &ids).await?;
     Ok(rows
         .into_iter()
-        .zip(online)
-        .filter_map(|((user_id, nickname, joined_at), online)| {
+        .zip(presence)
+        .filter_map(|((user_id, nickname, joined_at), presence)| {
             Some(Member {
                 server_id: server,
                 user: by_id.remove(&user_id)?,
                 nickname,
                 role_ids: roles.remove(&user_id).unwrap_or_default(),
                 joined_at,
-                online,
+                online: presence.online(),
+                status: presence.status,
+                custom_status: presence.custom_status,
             })
         })
         .collect())

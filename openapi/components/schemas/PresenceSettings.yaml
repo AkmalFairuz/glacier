@@ -1,0 +1,12 @@
+# Generated from the backend handlers (utoipa). Do not edit; run `cargo run -- openapi` in backend/.
+type: object
+description: The caller's own choice, for the status picker.
+required:
+- status
+properties:
+  custom_status:
+    oneOf:
+    - type: 'null'
+    - $ref: ./CustomStatus.yaml
+  status:
+    $ref: ./StatusSetting.yaml

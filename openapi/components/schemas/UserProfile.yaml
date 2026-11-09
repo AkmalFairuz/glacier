@@ -4,6 +4,7 @@ description: 'A user as seen by the caller: shared servers and the caller''s pri
 required:
 - mutual_servers
 - note
+- presence
 - user
 properties:
   mutual_servers:
@@ -15,5 +16,7 @@ properties:
     - string
     - 'null'
     description: Only visible to the caller.
+  presence:
+    $ref: ./Presence.yaml
   user:
     $ref: ./User.yaml

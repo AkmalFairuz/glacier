@@ -18,8 +18,8 @@ use crate::id::Id;
 use crate::state::AppState;
 use crate::{dms, reads, servers, users, voice};
 
-use super::events::{ClientFrame, Event, Target};
-use super::{presence, publish};
+use super::events::{ClientFrame, Event};
+use super::presence;
 
 const HEARTBEAT_TIMEOUT: Duration = Duration::from_secs(90);
 
@@ -80,12 +80,16 @@ impl Session {
         contacts.sort();
         contacts.dedup();
         contacts.retain(|id| *id != self.user);
-        let online = optional(presence::online_many(&self.state, &contacts).await, "dm presence");
+        let contact_presence = optional(
+            presence::presence_many(&self.state, &self.state.db.reader, &contacts).await,
+            "dm presence",
+        );
         let dm_presence: serde_json::Map<String, serde_json::Value> = contacts
             .iter()
-            .zip(online)
-            .map(|(id, on)| (id.to_string(), on.into()))
+            .zip(contact_presence)
+            .map(|(id, p)| (id.to_string(), json!(p)))
             .collect();
+        let presence_settings = presence::settings(&self.state, self.user).await?;
         let channel_heads: Vec<_> = optional(reads::repo::server_heads(&self.state, &ids).await, "channel heads")
             .into_iter()
             .filter(|h| {
@@ -106,6 +110,7 @@ impl Session {
                 "channel_heads": channel_heads,
                 "dm_unread": dm_unread,
                 "dm_presence": dm_presence,
+                "presence_settings": presence_settings,
             }),
         ));
         Ok(ids)
@@ -123,20 +128,16 @@ impl Session {
             "VOICE_LEAVE" => voice::leave(&self.state, self.user, Some(&self.conn_key)).await?,
             "VOICE_UPDATE" => voice::update(&self.state, self.user, &self.conn_key, frame.d).await?,
             "VOICE_SIGNAL" => voice::signal(&self.state, self.user, frame.d).await?,
+            // Sent by the client after a stretch without input, and again when input resumes.
+            "ACTIVITY" => {
+                let idle = frame.d.get("idle").and_then(|v| v.as_bool()).unwrap_or(false);
+                let before = presence::presence_of(&self.state, self.user).await?;
+                presence::set_idle(&self.state, self.user, &self.conn_key, idle).await?;
+                presence::broadcast_if_changed(&self.state, self.user, &before).await;
+            }
             other => return Err(AppError::bad(format!("unknown op {other}"))),
         }
         Ok(())
-    }
-
-    /// Tells everyone who can see this user: members of shared servers and DM contacts.
-    async fn set_presence(&self, servers: Vec<Id>, online: bool) {
-        let event = Event::new("PRESENCE_UPDATE", json!({ "user_id": self.user, "online": online }));
-        publish(&self.state, Target::Servers(servers), event.clone()).await;
-        match dms::repo::contacts(&self.state, self.user).await {
-            Ok(contacts) if !contacts.is_empty() => publish(&self.state, Target::Users(contacts), event).await,
-            Ok(_) => {}
-            Err(e) => tracing::warn!(error = %e, "presence: could not load DM contacts"),
-        }
     }
 }
 
@@ -156,20 +157,18 @@ async fn run(state: AppState, user: Id, socket: WebSocket) {
         .hub
         .register(user, server_ids.iter().copied().collect::<HashSet<_>>(), tx);
     metrics::counter!("glacier_gateway_connections_total").increment(1);
-    let server_ids = match session.ready().await {
-        Ok(ids) => ids,
-        Err(e) => {
-            tracing::warn!(error = %e, "READY failed");
-            state.hub.unregister(conn);
-            return;
-        }
-    };
-    if presence::connect(&state, user, &session.conn_key)
-        .await
-        .unwrap_or(false)
-    {
-        session.set_presence(server_ids, true).await;
+    if let Err(e) = session.ready().await {
+        tracing::warn!(error = %e, "READY failed");
+        state.hub.unregister(conn);
+        return;
     }
+    let before = presence::presence_of(&state, user)
+        .await
+        .unwrap_or(presence::Presence::OFFLINE);
+    if let Err(e) = presence::touch(&state, user, &session.conn_key).await {
+        tracing::warn!(error = %e, "presence: could not register socket");
+    }
+    presence::broadcast_if_changed(&state, user, &before).await;
 
     let mut deadline = Instant::now() + HEARTBEAT_TIMEOUT;
     loop {
@@ -199,13 +198,13 @@ async fn run(state: AppState, user: Id, socket: WebSocket) {
     if let Err(e) = voice::leave(&state, user, Some(&session.conn_key)).await {
         tracing::warn!(error = %e, "voice cleanup failed");
     }
-    if presence::disconnect(&state, user, &session.conn_key)
+    let before = presence::presence_of(&state, user)
         .await
-        .unwrap_or(false)
-    {
-        let ids = servers::repo::ids_for_user(&state, user).await.unwrap_or_default();
-        session.set_presence(ids, false).await;
+        .unwrap_or(presence::Presence::OFFLINE);
+    if let Err(e) = presence::disconnect(&state, user, &session.conn_key).await {
+        tracing::warn!(error = %e, "presence: could not remove socket");
     }
+    presence::broadcast_if_changed(&state, user, &before).await;
 }
 
 fn optional<T>(result: AppResult<Vec<T>>, what: &str) -> Vec<T> {

@@ -1,3 +1,4 @@
+use crate::gateway::presence::{CustomStatus, StatusSetting};
 use sqlx::MySqlPool;
 
 use crate::cache;
@@ -89,6 +90,25 @@ pub async fn note(state: &AppState, owner: Id, target: Id) -> AppResult<Option<S
         .fetch_optional(&state.db.writer)
         .await?;
     Ok(row.map(|(n,)| n))
+}
+
+pub async fn set_presence(
+    state: &AppState,
+    id: Id,
+    status: StatusSetting,
+    custom: Option<&CustomStatus>,
+) -> AppResult<()> {
+    sqlx::query(
+        "UPDATE users SET status = ?, custom_status_text = ?, custom_status_emoji = ?, custom_status_expires_at = ? WHERE id = ?",
+    )
+    .bind(status)
+    .bind(custom.and_then(|c| c.text.as_deref()))
+    .bind(custom.and_then(|c| c.emoji.as_deref()))
+    .bind(custom.and_then(|c| c.expires_at))
+    .bind(id)
+    .execute(&state.db.writer)
+    .await?;
+    Ok(())
 }
 
 pub async fn set_note(state: &AppState, owner: Id, target: Id, note: &str) -> AppResult<()> {

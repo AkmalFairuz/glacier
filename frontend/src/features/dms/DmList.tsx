@@ -11,7 +11,8 @@ import { useChannelUnread } from '../reads/readStore'
 import { Menu } from '../../ui/Menu'
 import { useMenu } from '../../ui/useMenu'
 import { useMe } from '../auth/useSession'
-import { useIsOnline } from '../members/presenceStore'
+import { activeCustomStatus, usePresenceOf } from '../members/presenceStore'
+import { CustomStatusText } from '../user/CustomStatusText'
 import { dmsApi } from './api'
 import { removeDm } from './cache'
 import { otherRecipients, useDms, useDmTitle } from './hooks'
@@ -51,7 +52,8 @@ function DmItem({ channel }: { channel: Channel }) {
   const { data: me } = useMe()
   const title = useDmTitle(channel)
   const other = otherRecipients(channel, me?.id)[0]
-  const online = useIsOnline(other?.id ?? '', false)
+  const presence = usePresenceOf(other?.id ?? '')
+  const custom = presence.status === 'offline' ? null : activeCustomStatus(presence.custom_status)
   const menu = useMenu()
   const isGroup = channel.type === 'group_dm'
   const unread = useChannelUnread(channel.id)
@@ -73,11 +75,11 @@ function DmItem({ channel }: { channel: Channel }) {
           isGroup ? (
             <Avatar name={title} seed={channel.id} size="mid" glyph={<LuUsers />} />
           ) : (
-            <Avatar name={title} src={other?.avatar_url} seed={other?.id} size="mid" online={online} />
+            <Avatar name={title} src={other?.avatar_url} seed={other?.id} size="mid" status={presence.status} />
           )
         }
         label={title}
-        description={isGroup ? `${channel.recipients.length} members` : undefined}
+        description={isGroup ? `${channel.recipients.length} members` : custom ? <CustomStatusText custom={custom} /> : undefined}
         onClick={layout.closeNav}
         onContextMenu={isGroup ? menu.openAtPointer : undefined}
       />

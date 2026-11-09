@@ -1,13 +1,19 @@
 # Generated from the backend handlers (utoipa). Do not edit; run `cargo run -- openapi` in backend/.
 type: object
 required:
+- custom_status
 - joined_at
 - nickname
 - online
 - role_ids
 - server_id
+- status
 - user
 properties:
+  custom_status:
+    oneOf:
+    - type: 'null'
+    - $ref: ./CustomStatus.yaml
   joined_at:
     type: string
     format: date-time
@@ -17,11 +23,14 @@ properties:
     - 'null'
   online:
     type: boolean
+    description: Same as `status != offline`.
   role_ids:
     type: array
     items:
       $ref: ./Id.yaml
   server_id:
     $ref: ./Id.yaml
+  status:
+    $ref: ./Status.yaml
   user:
     $ref: ./User.yaml

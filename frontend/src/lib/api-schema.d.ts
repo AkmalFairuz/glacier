@@ -612,6 +612,22 @@ export interface paths {
         patch: operations["users_update_me"];
         trace?: never;
     };
+    "/api/users/@me/presence": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch: operations["users_update_presence"];
+        trace?: never;
+    };
     "/api/users/search": {
         parameters: {
             query?: never;
@@ -769,6 +785,17 @@ export interface components {
             /** @description Starting channels; defaults to a blank server. */
             template?: components["schemas"]["ServerTemplate"];
         };
+        CustomStatus: {
+            /** @description One emoji. */
+            emoji?: string | null;
+            /**
+             * Format: date-time
+             * @description Clears itself after this time; `null` keeps it until changed.
+             */
+            expires_at?: string | null;
+            /** @description Up to 128 characters. */
+            text?: string | null;
+        };
         EditMessage: {
             content: string;
         };
@@ -816,12 +843,15 @@ export interface components {
             username: string;
         };
         Member: {
+            custom_status: null | components["schemas"]["CustomStatus"];
             /** Format: date-time */
             joined_at: string;
             nickname: string | null;
+            /** @description Same as `status != offline`. */
             online: boolean;
             role_ids: components["schemas"]["Id"][];
             server_id: components["schemas"]["Id"];
+            status: components["schemas"]["Status"];
             user: components["schemas"]["User"];
         };
         Message: {
@@ -858,6 +888,16 @@ export interface components {
             };
             /** Format: int64 */
             server: number;
+        };
+        /** @description A user's presence as others see it. */
+        Presence: {
+            custom_status?: null | components["schemas"]["CustomStatus"];
+            status: components["schemas"]["Status"];
+        };
+        /** @description The caller's own choice, for the status picker. */
+        PresenceSettings: {
+            custom_status?: null | components["schemas"]["CustomStatus"];
+            status: components["schemas"]["StatusSetting"];
         };
         PutOverwrite: {
             /** Format: int64 */
@@ -930,6 +970,16 @@ export interface components {
         };
         /** @enum {string} */
         ServerTemplate: "blank" | "gaming" | "friends" | "study_group" | "school_club";
+        /**
+         * @description What other people see.
+         * @enum {string}
+         */
+        Status: "online" | "idle" | "dnd" | "offline";
+        /**
+         * @description What the user chose. Invisible appears offline to everyone else.
+         * @enum {string}
+         */
+        StatusSetting: "online" | "idle" | "dnd" | "invisible";
         /** @enum {string} */
         TargetType: "role" | "member";
         UpdateChannel: {
@@ -952,6 +1002,10 @@ export interface components {
         UpdateMember: {
             nickname?: string | null;
             role_ids?: components["schemas"]["Id"][] | null;
+        };
+        UpdatePresence: {
+            custom_status?: null | components["schemas"]["CustomStatus"];
+            status?: null | components["schemas"]["StatusSetting"];
         };
         UpdateRole: {
             /** Format: int32 */
@@ -1007,6 +1061,7 @@ export interface components {
             mutual_servers: components["schemas"]["Server"][];
             /** @description Only visible to the caller. */
             note: string | null;
+            presence: components["schemas"]["Presence"];
             user: components["schemas"]["User"];
         };
         VoiceState: {
@@ -2330,6 +2385,29 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["User"];
+                };
+            };
+        };
+    };
+    users_update_presence: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdatePresence"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PresenceSettings"];
                 };
             };
         };

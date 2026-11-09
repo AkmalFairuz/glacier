@@ -1,0 +1,18 @@
+# Generated from the backend handlers (utoipa). Do not edit; run `cargo run -- openapi` in backend/.
+patch:
+  tags:
+  - users
+  operationId: users_update_presence
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ../../components/schemas/UpdatePresence.yaml
+    required: true
+  responses:
+    '200':
+      description: ''
+      content:
+        application/json:
+          schema:
+            $ref: ../../components/schemas/PresenceSettings.yaml

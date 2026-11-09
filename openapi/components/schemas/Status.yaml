@@ -1,0 +1,8 @@
+# Generated from the backend handlers (utoipa). Do not edit; run `cargo run -- openapi` in backend/.
+type: string
+description: What other people see.
+enum:
+- online
+- idle
+- dnd
+- offline

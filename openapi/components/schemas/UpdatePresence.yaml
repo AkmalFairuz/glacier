@@ -1,0 +1,13 @@
+# Generated from the backend handlers (utoipa). Do not edit; run `cargo run -- openapi` in backend/.
+type: object
+properties:
+  custom_status:
+    oneOf:
+    - type: 'null'
+    - $ref: ./CustomStatus.yaml
+      description: '`null` clears the custom status; omit to keep it.'
+  status:
+    oneOf:
+    - type: 'null'
+    - $ref: ./StatusSetting.yaml
+      description: Omit to keep the current status.

@@ -3,7 +3,7 @@ import { keys } from '../../lib/keys'
 import { can, Perm } from '../../lib/permissions'
 import { useMe } from '../auth/useSession'
 import { useMembers } from '../members/hooks'
-import { useIsOnline } from '../members/presenceStore'
+import { activeCustomStatus, OFFLINE, shownStatus, useMyPresence, usePresenceOf } from '../members/presenceStore'
 import { useRoles } from '../roles/hooks'
 import { usePermissions, useServer } from '../servers/hooks'
 import { useVoice } from '../voice/voiceStore'
@@ -23,7 +23,12 @@ export function useProfileData(userId: string, serverId: string | null) {
         .flat()
         .find((v) => v.user_id === userId) ?? null,
   )
-  const online = useIsOnline(userId, member?.online ?? false)
+  const fallback = profile.data?.presence ?? (member ? { status: member.status, custom_status: member.custom_status ?? null } : OFFLINE)
+  const live = usePresenceOf(userId, fallback)
+  const mine = useMyPresence()
+  const isMe = userId === me?.id
+  // Your own card shows what you chose (Invisible looks offline), not what others see a moment later.
+  const presence = isMe ? { status: shownStatus(mine.status), custom_status: mine.custom_status ?? null } : live
 
   const user = profile.data?.user ?? member?.user
   return {
@@ -35,9 +40,11 @@ export function useProfileData(userId: string, serverId: string | null) {
     memberRoles: roles.filter((r) => !r.is_default && member?.role_ids.includes(r.id)),
     assignableRoles: roles.filter((r) => !r.is_default && !member?.role_ids.includes(r.id)),
     canManageRoles: !!member && can(perms, Perm.MANAGE_ROLES),
-    isMe: userId === me?.id,
+    isMe,
     isOwner: server?.owner_id === userId,
-    online: userId === me?.id || online,
+    online: presence.status !== 'offline',
+    status: presence.status,
+    customStatus: presence.status === 'offline' && !isMe ? null : activeCustomStatus(presence.custom_status),
     voice,
   }
 }

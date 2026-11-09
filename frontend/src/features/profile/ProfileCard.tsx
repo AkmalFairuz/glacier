@@ -22,7 +22,7 @@ export function ProfileCard({ userId, serverId }: { userId: string; serverId: st
 
   return (
     <article className={s.card} aria-label={`${data.user.display_name}’s profile`}>
-      <ProfileBanner user={data.user} online={data.online} actions={<ProfileMenu user={data.user} serverId={serverId} isMe={data.isMe} />} />
+      <ProfileBanner user={data.user} status={data.status} actions={<ProfileMenu user={data.user} serverId={serverId} isMe={data.isMe} />} />
       <div className={s.body}>
         <div className={s.head}>
           <ProfileIdentity data={data} />

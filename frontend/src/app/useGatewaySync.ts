@@ -7,7 +7,7 @@ import { useSession } from '../features/auth/useSession'
 import { removeChannel, upsertChannel } from '../features/channels/cache'
 import { bumpDm, removeDm, upsertDm } from '../features/dms/cache'
 import { removeMember, upsertMember } from '../features/members/cache'
-import { setPresence } from '../features/members/presenceStore'
+import { myPresence, setPresence } from '../features/members/presenceStore'
 import { addMessage, applyReaction, deleteMessage, updateMessage } from '../features/messages/cache'
 import { startTyping, stopTyping } from '../features/messages/typingStore'
 import { removeRole, upsertRole } from '../features/roles/cache'
@@ -31,7 +31,8 @@ function apply(qc: QueryClient, event: GatewayEvent) {
       qc.setQueryData(keys.servers, event.d.servers)
       qc.setQueryData(keys.dms, event.d.dms)
       reads.hydrate(event.d.read_states ?? [], event.d.channel_heads ?? [], event.d.dms, event.d.dm_unread ?? [])
-      for (const [userId, online] of Object.entries(event.d.dm_presence ?? {})) setPresence(userId, online)
+      for (const [userId, presence] of Object.entries(event.d.dm_presence ?? {})) setPresence(userId, presence)
+      if (event.d.presence_settings) myPresence.set(event.d.presence_settings)
       return
     case 'MESSAGE_CREATE':
       addMessage(qc, event.d)
@@ -82,7 +83,12 @@ function apply(qc: QueryClient, event: GatewayEvent) {
       void qc.invalidateQueries({ queryKey: keys.channels(event.d.server_id) })
       return
     case 'PRESENCE_UPDATE':
-      return setPresence(event.d.user_id, event.d.online)
+      return setPresence(event.d.user_id, {
+        status: event.d.status ?? (event.d.online ? 'online' : 'offline'),
+        custom_status: event.d.custom_status ?? null,
+      })
+    case 'PRESENCE_SETTINGS_UPDATE':
+      return myPresence.set(event.d)
     case 'READ_STATE_UPDATE':
       return reads.setRead(event.d.channel_id, event.d.last_read_message_id)
     case 'RECEIPT_UPDATE':

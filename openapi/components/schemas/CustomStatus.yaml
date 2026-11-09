@@ -1,0 +1,19 @@
+# Generated from the backend handlers (utoipa). Do not edit; run `cargo run -- openapi` in backend/.
+type: object
+properties:
+  emoji:
+    type:
+    - string
+    - 'null'
+    description: One emoji.
+  expires_at:
+    type:
+    - string
+    - 'null'
+    format: date-time
+    description: Clears itself after this time; `null` keeps it until changed.
+  text:
+    type:
+    - string
+    - 'null'
+    description: Up to 128 characters.

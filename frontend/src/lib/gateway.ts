@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import type { Channel, Member, Message, Role, Server, User, VoiceState } from './types'
+import type { Channel, CustomStatus, Member, Message, Presence, PresenceSettings, Role, Server, Status, User, VoiceState } from './types'
 
 export type ReadState = { channel_id: string; last_read_message_id: string }
 export type ChannelHead = { channel_id: string; server_id: string | null; last_message_id: string }
@@ -12,8 +12,10 @@ export type ReadyPayload = {
   read_states: ReadState[]
   channel_heads: ChannelHead[]
   dm_unread: { channel_id: string; count: number }[]
-  /** Online state of everyone the user shares a DM with, keyed by user id. */
-  dm_presence?: Record<string, boolean>
+  /** Presence of everyone the user shares a DM with, keyed by user id. */
+  dm_presence?: Record<string, Presence>
+  /** The user's own chosen status and custom status. */
+  presence_settings?: PresenceSettings
 }
 
 export type ReactionEvent = { channel_id: string; message_id: string; user_id: string; emoji: string }
@@ -36,7 +38,8 @@ export type GatewayEvent =
   | { t: 'ROLE_CREATE' | 'ROLE_UPDATE'; d: Role }
   | { t: 'ROLE_DELETE'; d: { server_id: string; id: string } }
   | { t: 'PERMISSIONS_CHANGED'; d: { server_id: string } }
-  | { t: 'PRESENCE_UPDATE'; d: { user_id: string; online: boolean } }
+  | { t: 'PRESENCE_UPDATE'; d: { user_id: string; online: boolean; status?: Status; custom_status?: CustomStatus | null } }
+  | { t: 'PRESENCE_SETTINGS_UPDATE'; d: PresenceSettings }
   | { t: 'USER_UPDATE'; d: User }
   | { t: 'VOICE_STATE_UPDATE'; d: VoiceState }
   | { t: 'VOICE_STATE_DELETE'; d: { user_id: string; channel_id: string } }

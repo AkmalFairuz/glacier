@@ -1,0 +1,8 @@
+# Generated from the backend handlers (utoipa). Do not edit; run `cargo run -- openapi` in backend/.
+type: string
+description: What the user chose. Invisible appears offline to everyone else.
+enum:
+- online
+- idle
+- dnd
+- invisible

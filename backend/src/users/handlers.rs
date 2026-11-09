@@ -6,12 +6,13 @@ use utoipa::ToSchema;
 
 use crate::auth::AuthUser;
 use crate::error::{AppError, AppResult};
+use crate::gateway::presence::{self, CustomStatus, PresenceSettings};
 use crate::gateway::{self, Event, Target};
 use crate::id::Id;
 use crate::servers;
 use crate::state::AppState;
 
-use super::models::{NoteBody, SearchQuery, UpdateUser, User, UserProfile};
+use super::models::{NoteBody, SearchQuery, UpdatePresence, UpdateUser, User, UserProfile};
 use super::repo;
 
 #[utoipa::path(get, path = "/api/users/@me", tag = "users", responses((status = 200, body = User)))]
@@ -99,11 +100,62 @@ pub async fn profile(
         servers::repo::mutual(&state, auth.id, id).await?
     };
     let note = repo::note(&state, auth.id, id).await?;
+    let presence = presence::presence_of(&state, id).await?;
     Ok(Json(UserProfile {
         user,
+        presence,
         mutual_servers,
         note,
     }))
+}
+
+/// Trims a custom status and rejects bad input; an empty one counts as cleared.
+fn clean_custom_status(input: CustomStatus) -> AppResult<Option<CustomStatus>> {
+    let text = input.text.map(|t| t.trim().to_string()).filter(|t| !t.is_empty());
+    let emoji = input.emoji.map(|e| e.trim().to_string()).filter(|e| !e.is_empty());
+    if text.as_ref().is_some_and(|t| t.chars().count() > 128) {
+        return Err(AppError::bad("custom status must be at most 128 characters"));
+    }
+    if emoji.as_ref().is_some_and(|e| e.chars().count() > 16) {
+        return Err(AppError::bad("custom status emoji must be a single emoji"));
+    }
+    if input.expires_at.is_some_and(|t| t <= chrono::Utc::now()) {
+        return Err(AppError::bad("custom status expiry must be in the future"));
+    }
+    Ok((text.is_some() || emoji.is_some()).then_some(CustomStatus {
+        text,
+        emoji,
+        expires_at: input.expires_at,
+    }))
+}
+
+#[utoipa::path(patch, path = "/api/users/@me/presence", tag = "users", request_body = UpdatePresence,
+    responses((status = 200, body = PresenceSettings)))]
+pub async fn update_presence(
+    State(state): State<AppState>,
+    auth: AuthUser,
+    Json(body): Json<UpdatePresence>,
+) -> AppResult<Json<PresenceSettings>> {
+    crate::ratelimit::check(&state, "presence", &auth.id.to_string(), 20, 60).await?;
+    let current = presence::settings(&state, auth.id).await?;
+    let status = body.status.unwrap_or(current.status);
+    let custom = match body.custom_status {
+        None => current.custom_status,
+        Some(None) => None,
+        Some(Some(input)) => clean_custom_status(input)?,
+    };
+    let before = presence::presence_of(&state, auth.id).await?;
+    repo::set_presence(&state, auth.id, status, custom.as_ref()).await?;
+    presence::broadcast_if_changed(&state, auth.id, &before).await;
+    let settings = presence::settings(&state, auth.id).await?;
+    // Keeps the status picker in sync across the user's other tabs and devices.
+    gateway::publish(
+        &state,
+        Target::User(auth.id),
+        Event::new("PRESENCE_SETTINGS_UPDATE", &settings),
+    )
+    .await;
+    Ok(Json(settings))
 }
 
 #[utoipa::path(put, path = "/api/users/{id}/note", tag = "users", params(("id" = Id, Path)), request_body = NoteBody, responses((status = 204)))]

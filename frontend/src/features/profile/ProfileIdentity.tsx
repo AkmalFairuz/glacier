@@ -1,4 +1,5 @@
 import { LuCrown } from 'react-icons/lu'
+import { CustomStatusText } from '../user/CustomStatusText'
 import type { ProfileData } from './useProfileData'
 import s from './ProfileIdentity.module.css'
 
@@ -17,6 +18,7 @@ export function ProfileIdentity({ data, large }: { data: ProfileData; large?: bo
         @{user.username}
         {member?.nickname && <span className={s.alias}>{user.display_name}</span>}
       </p>
+      {data.customStatus && <CustomStatusText custom={data.customStatus} className={s.custom} />}
     </header>
   )
 }

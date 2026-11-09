@@ -1,0 +1,13 @@
+# Generated from the backend handlers (utoipa). Do not edit; run `cargo run -- openapi` in backend/.
+type: object
+description: A user's presence as others see it.
+required:
+- status
+properties:
+  custom_status:
+    oneOf:
+    - type: 'null'
+    - $ref: ./CustomStatus.yaml
+      description: Hidden while offline or invisible.
+  status:
+    $ref: ./Status.yaml

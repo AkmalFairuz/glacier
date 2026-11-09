@@ -136,3 +136,15 @@
 .online {
   background: var(--online);
 }
+
+/* Idle: a moon, the dot with a bite taken out of its top left. */
+.idle {
+  background: radial-gradient(circle at 22% 22%, var(--status-ring, var(--bg-sidebar)) 0 36%, transparent 38%), var(--idle);
+}
+
+/* Do Not Disturb: a red dot with a bar across. */
+.dnd {
+  background:
+    linear-gradient(var(--status-ring, var(--bg-sidebar)), var(--status-ring, var(--bg-sidebar))) center / 64% 26% no-repeat,
+    var(--dnd);
+}

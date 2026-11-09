@@ -1,3 +1,4 @@
+import { useMyPresence } from '../members/presenceStore'
 import { useEffect } from 'react'
 import { LuPhone, LuPhoneOff } from 'react-icons/lu'
 import { useNavigate } from 'react-router'
@@ -16,6 +17,8 @@ export function IncomingCallToast() {
 
   useEffect(() => {
     if (!ringing) return
+    // Do Not Disturb: show the call, but don't ring.
+    if (useMyPresence.getState().status === 'dnd') return
     playSound('call')
     const timer = window.setInterval(() => playSound('call'), 2500)
     return () => window.clearInterval(timer)

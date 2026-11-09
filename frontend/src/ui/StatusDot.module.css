@@ -1,0 +1,26 @@
+.dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  --cut: var(--bg-elevated);
+}
+
+.online {
+  background: var(--online);
+}
+
+.idle {
+  background: radial-gradient(circle at 22% 22%, var(--cut) 0 36%, transparent 38%), var(--idle);
+}
+
+.dnd {
+  background:
+    linear-gradient(var(--cut), var(--cut)) center / 64% 26% no-repeat,
+    var(--dnd);
+}
+
+/* Invisible: the offline ring. */
+.invisible {
+  background: radial-gradient(circle, var(--cut) 0 32%, var(--text-faint) 34%);
+}

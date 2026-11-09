@@ -18,8 +18,19 @@
   opacity: 0.5;
 }
 
-.name {
+.names {
+  display: flex;
   flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.custom {
+  font-size: var(--text-xs);
+  color: var(--text-faint);
+}
+
+.name {
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;

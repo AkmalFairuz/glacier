@@ -46,7 +46,7 @@ function FullProfile({ userId, serverId, initialTab }: { userId: string; serverI
       <aside className={s.side}>
         <ProfileBanner
           user={data.user}
-          online={data.online}
+          status={data.status}
           size="full"
           actions={<ProfileMenu user={data.user} serverId={serverId} isMe={data.isMe} inFullView />}
         />
