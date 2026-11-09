@@ -23,7 +23,7 @@ post:
           $ref: ../../components/schemas/CreateServer.yaml
     required: true
   responses:
-    '200':
+    '201':
       description: ''
       content:
         application/json:

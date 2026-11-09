@@ -40,13 +40,13 @@ pub async fn list(
 }
 
 #[utoipa::path(post, path = "/api/channels/{id}/messages", tag = "messages",
-    params(("id" = Id, Path)), request_body = CreateMessage, responses((status = 200, body = Message)))]
+    params(("id" = Id, Path)), request_body = CreateMessage, responses((status = 201, body = Message)))]
 pub async fn create(
     State(state): State<AppState>,
     auth: AuthUser,
     Path(id): Path<Id>,
     Json(body): Json<CreateMessage>,
-) -> AppResult<Json<Message>> {
+) -> AppResult<(StatusCode, Json<Message>)> {
     let access = channels::access(&state, id, auth.id).await?;
     access.require_text()?;
     access.require(bits::SEND_MESSAGES)?;
@@ -85,7 +85,7 @@ pub async fn create(
     let message = repo::get(&state, id, message_id).await?;
     gateway::publish(&state, access.target(), Event::new("MESSAGE_CREATE", &message)).await;
     crate::reads::mark_read(&state, auth.id, id, access.channel.server_id, message_id).await?;
-    Ok(Json(message))
+    Ok((StatusCode::CREATED, Json(message)))
 }
 
 #[utoipa::path(patch, path = "/api/channels/{cid}/messages/{mid}", tag = "messages",

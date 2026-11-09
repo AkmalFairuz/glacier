@@ -17,8 +17,11 @@ fn valid_username(name: &str) -> bool {
 }
 
 #[utoipa::path(post, path = "/api/auth/register", tag = "auth", security(()), request_body = RegisterBody,
-    responses((status = 200, body = AuthResponse), (status = 409, body = ErrorBody)))]
-pub async fn register(State(state): State<AppState>, Json(body): Json<RegisterBody>) -> AppResult<Json<AuthResponse>> {
+    responses((status = 201, body = AuthResponse), (status = 409, body = ErrorBody)))]
+pub async fn register(
+    State(state): State<AppState>,
+    Json(body): Json<RegisterBody>,
+) -> AppResult<(StatusCode, Json<AuthResponse>)> {
     let username = body.username.trim().to_lowercase();
     if !valid_username(&username) {
         return Err(AppError::bad("username must be 2-32 characters: a-z, 0-9, _ or ."));
@@ -46,7 +49,7 @@ pub async fn register(State(state): State<AppState>, Json(body): Json<RegisterBo
         })?;
     let token = session::create(&state, id).await?;
     let user = users::repo::get(&state, id).await?;
-    Ok(Json(AuthResponse { token, user }))
+    Ok((StatusCode::CREATED, Json(AuthResponse { token, user })))
 }
 
 #[utoipa::path(post, path = "/api/auth/login", tag = "auth", security(()), request_body = LoginBody,

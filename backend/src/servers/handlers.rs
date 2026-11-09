@@ -27,12 +27,12 @@ pub async fn list(State(state): State<AppState>, auth: AuthUser) -> AppResult<Js
     Ok(Json(repo::list_for_user(&state, auth.id).await?))
 }
 
-#[utoipa::path(post, path = "/api/servers", tag = "servers", request_body = CreateServer, responses((status = 200, body = Server)))]
+#[utoipa::path(post, path = "/api/servers", tag = "servers", request_body = CreateServer, responses((status = 201, body = Server)))]
 pub async fn create(
     State(state): State<AppState>,
     auth: AuthUser,
     Json(body): Json<CreateServer>,
-) -> AppResult<Json<Server>> {
+) -> AppResult<(StatusCode, Json<Server>)> {
     let name = clean_name(&body.name)?;
     let description = body.description.as_deref().map(str::trim).filter(|d| !d.is_empty());
     let id = repo::create(
@@ -50,7 +50,7 @@ pub async fn create(
     permissions::forget_member(&state, id, auth.id).await?;
     let server = repo::get(&state, id).await?;
     gateway::publish(&state, Target::User(auth.id), Event::new("SERVER_CREATE", &server)).await;
-    Ok(Json(server))
+    Ok((StatusCode::CREATED, Json(server)))
 }
 
 #[utoipa::path(get, path = "/api/servers/discover", tag = "servers", params(DiscoverQuery), responses((status = 200, body = Vec<Server>)))]
