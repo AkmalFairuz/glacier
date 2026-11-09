@@ -18,6 +18,12 @@
 - **Realtime**: WebSocket gateway; events fan out across backend replicas through Redis pub/sub
 - **Voice / video**: WebRTC mesh (peer-to-peer); the backend relays signaling only. Public STUN only, with no TURN relay.
 
+## Why this project
+
+A Discord-like chat app needs many cooperating services (proxy, scaled API, replicated database,
+cache and pub/sub, object storage, monitoring), which makes it a good fit for a containerized
+cloud setup.
+
 ## Architecture
 
 <p align="center">
@@ -26,12 +32,26 @@
 
 ## Run everything
 
+From a fresh clone:
+
 ```sh
-cp .env.example .env   # then change the passwords
+cp .env.example .env   # then change the passwords in .env
 docker compose up -d --build
 ```
 
-Open http://localhost:8080 and register an account.
+Open http://localhost:8080 and register an account. Grafana is on http://localhost:3001.
+
+`.env` holds every password and user name (MariaDB, replication, the exporters, MinIO and Grafana);
+`.env.example` lists the same variables with placeholder values, and `.env` is ignored by git.
+MariaDB and MinIO keep the credentials they were first started with, so set them before the first
+`up`.
+
+Optional tools and publishing:
+
+```sh
+docker compose --profile tools up -d adminer   # Adminer on http://localhost:8082 (server: mariadb-primary)
+docker compose push backend nginx              # publish DOCKERHUB_USER/glacier-*:GLACIER_VERSION
+```
 
 | Service                            | Purpose                                                         |
 | ---------------------------------- | --------------------------------------------------------------- |
@@ -42,12 +62,14 @@ Open http://localhost:8080 and register an account.
 | `redis`                            | Sessions, cache, rate limits, presence, voice state, pub/sub    |
 | `minio`                            | Uploaded files (bucket `glacier-uploads`, public read)          |
 | `prometheus`, `grafana`, exporters | Monitoring (see [Monitoring](#monitoring))                      |
+| `adminer` (profile `tools`)        | Database admin UI                                               |
 
 Scale the backend: `docker compose up -d --scale backend=5`. nginx re-resolves
 the `backend` service name every 10 seconds, so it picks up new replicas.
 
 ## API
 
+- Health: http://localhost:8080/health (also `/api/health`)
 - Swagger UI: http://localhost:8080/api/docs
 - Spec: http://localhost:8080/api/openapi.json (a copy is committed as split YAML in `openapi/`)
 - Gateway: `ws://localhost:8080/gateway?token=<token>` (frames are `{op,d}` from the client and `{t,d}` from the server)
