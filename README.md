@@ -27,7 +27,8 @@
 ## Run everything
 
 ```sh
-docker compose up --build
+cp .env.example .env   # then change the passwords
+docker compose up -d --build
 ```
 
 Open http://localhost:8080 and register an account.
@@ -69,7 +70,7 @@ cd ../frontend && npm run gen:api          # TypeScript types from openapi/opena
 
 ## Monitoring
 
-Grafana runs at http://localhost:3001 (`admin` / `glacier-grafana`) with Backend, Data services,
+Grafana runs at http://localhost:3001 (login from `GRAFANA_ADMIN_*` in `.env`) with Backend, Data services,
 and Host and containers dashboards. Prometheus scrapes the backend replicas, exporters for
 MariaDB, Redis and nginx, MinIO, node-exporter and cAdvisor. Only Grafana is published to the
 host. Alert rules are in `monitoring/prometheus/rules/`.
@@ -86,7 +87,7 @@ Docker Compose doesn't publish the data service ports. For host development, add
 `docker-compose.override.yml` that maps them (`3306`, `6379`, `9000`), then:
 
 ```sh
-cd backend && cargo run            # http://localhost:3000, defaults match the compose credentials
+cd backend && cargo run            # http://localhost:3000; set DATABASE_URL and S3_* to match your .env
 cd frontend && npm install && npm run dev
 ```
 
