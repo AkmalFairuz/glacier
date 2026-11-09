@@ -18,6 +18,10 @@
 - **Realtime**: WebSocket gateway; events fan out across backend replicas through Redis pub/sub
 - **Voice / video**: WebRTC mesh (peer-to-peer); the backend relays signaling only. Public STUN only, with no TURN relay.
 
+## Architecture
+
+![Glacier containers: the browser reaches nginx through the only published port, 8080:80; nginx, three backend replicas, Redis, MariaDB primary and replica, and MinIO share the glacier_default bridge network, and the data containers keep their state in four named volumes.](docs/architecture.svg)
+
 ## Run everything
 
 ```sh
@@ -91,7 +95,7 @@ Format with `cargo fmt` and `npm run format`.
 
 ```
 backend/    Rust crate: one module per feature (handlers.rs, repo.rs with raw SQL, models.rs)
-docs/       README screenshot
+docs/       README screenshot and architecture diagram
 frontend/   React app: src/ui (primitives), src/features/* (feature components and hooks)
 nginx/      Reverse proxy config (baked into the frontend image)
 openapi/    Generated OpenAPI spec (YAML, split per path and schema)
