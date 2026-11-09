@@ -19,6 +19,10 @@ pub fn router() -> Router<AppState> {
             patch(handlers::edit).delete(handlers::delete),
         )
         .route(
+            "/channels/{cid}/messages/{mid}/embeds",
+            axum::routing::delete(crate::embeds::remove),
+        )
+        .route(
             "/channels/{cid}/messages/{mid}/reactions/{emoji}",
             put(reactions::add).delete(reactions::remove),
         )

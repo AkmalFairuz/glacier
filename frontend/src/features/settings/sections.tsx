@@ -34,7 +34,7 @@ export const SETTINGS_GROUPS: NavGroup[] = [
         icon: <LuPalette />,
         keywords: 'theme color dark light midnight aurora ember sandstone lichen heather compact cozy font size time clock',
       },
-      { id: 'accessibility', label: 'Accessibility', icon: <LuAccessibility />, keywords: 'motion animation underline links' },
+      { id: 'accessibility', label: 'Accessibility', icon: <LuAccessibility />, keywords: 'motion animation underline links previews embeds' },
       {
         id: 'voice-video',
         label: 'Voice & Video',

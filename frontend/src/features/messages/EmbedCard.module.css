@@ -1,0 +1,98 @@
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  width: fit-content;
+  max-width: min(432px, 100%);
+  margin-top: var(--space-1);
+  padding: var(--space-3) var(--space-4) var(--space-3) var(--space-3);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  background: var(--bg-sunken);
+  animation: embed-in var(--duration-slow) var(--ease-out);
+}
+
+@keyframes embed-in {
+  from {
+    opacity: 0;
+    translate: 0 4px;
+  }
+}
+
+.body {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  min-width: 0;
+}
+
+.site {
+  font-size: var(--text-xs);
+  color: var(--text-faint);
+}
+
+.title {
+  font-size: var(--text-md);
+  font-weight: 600;
+  color: var(--accent);
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+.title:hover {
+  text-decoration: underline;
+}
+
+.description {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  overflow: hidden;
+  font-size: var(--text-sm);
+  line-height: 1.45;
+  color: var(--text-muted);
+  white-space: pre-line;
+}
+
+.thumb {
+  flex-shrink: 0;
+  width: 80px;
+  height: 80px;
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+}
+
+.imageLink {
+  display: block;
+}
+
+.image {
+  display: block;
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+  max-height: 300px;
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+}
+
+.remove {
+  position: absolute;
+  top: var(--space-1);
+  right: var(--space-1);
+  opacity: 0;
+  transition: opacity var(--duration);
+}
+
+.card:hover .remove,
+.remove:focus-within {
+  opacity: 1;
+}

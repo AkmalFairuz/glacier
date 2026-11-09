@@ -1,0 +1,20 @@
+# Generated from the backend handlers (utoipa). Do not edit; run `cargo run -- openapi` in backend/.
+delete:
+  tags:
+  - messages
+  summary: Removes the link previews from a message for good (author or Manage Messages).
+  operationId: messages_remove_embeds
+  parameters:
+  - name: cid
+    in: path
+    required: true
+    schema:
+      $ref: ../../components/schemas/Id.yaml
+  - name: mid
+    in: path
+    required: true
+    schema:
+      $ref: ../../components/schemas/Id.yaml
+  responses:
+    '204':
+      description: ''

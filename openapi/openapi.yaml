@@ -20,6 +20,8 @@ paths:
     $ref: ./paths/auth/auth_sessions_revoke-others.yaml
   /api/channels/{cid}/messages/{mid}:
     $ref: ./paths/messages/channels_cid_messages_mid.yaml
+  /api/channels/{cid}/messages/{mid}/embeds:
+    $ref: ./paths/messages/channels_cid_messages_mid_embeds.yaml
   /api/channels/{cid}/messages/{mid}/reactions/{emoji}:
     $ref: ./paths/messages/channels_cid_messages_mid_reactions_emoji.yaml
   /api/channels/{id}:
@@ -128,6 +130,10 @@ components:
       $ref: ./components/schemas/CustomStatus.yaml
     EditMessage:
       $ref: ./components/schemas/EditMessage.yaml
+    Embed:
+      $ref: ./components/schemas/Embed.yaml
+    EmbedImage:
+      $ref: ./components/schemas/EmbedImage.yaml
     ErrorBody:
       $ref: ./components/schemas/ErrorBody.yaml
     ErrorDetail:

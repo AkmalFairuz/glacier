@@ -18,5 +18,6 @@ export const messagesApi = {
     client.PUT('/api/channels/{cid}/messages/{mid}/reactions/{emoji}', { params: { path: { cid: channelId, mid: messageId, emoji } } }),
   unreact: (channelId: string, messageId: string, emoji: string) =>
     client.DELETE('/api/channels/{cid}/messages/{mid}/reactions/{emoji}', { params: { path: { cid: channelId, mid: messageId, emoji } } }),
+  removeEmbeds: (channelId: string, messageId: string) => client.DELETE('/api/channels/{cid}/messages/{mid}/embeds', messagePath(channelId, messageId)),
   typing: (channelId: string) => client.POST('/api/channels/{id}/typing', { params: { path: { id: channelId } } }),
 }

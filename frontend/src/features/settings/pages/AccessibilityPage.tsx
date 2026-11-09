@@ -21,6 +21,7 @@ export function AccessibilityPage() {
       </SettingsSection>
       <SettingsSection title="Text">
         <Toggle label="Always underline links" checked={s.underlineLinks} onChange={(underlineLinks) => settings.set({ underlineLinks })} />
+        <Toggle label="Show link previews" checked={s.linkPreviews} onChange={(linkPreviews) => settings.set({ linkPreviews })} />
       </SettingsSection>
     </>
   )

@@ -7,7 +7,9 @@ pub use export::write;
 use utoipa::openapi::security::{HttpAuthScheme, HttpBuilder, SecurityScheme};
 use utoipa::{Modify, OpenApi};
 
-use crate::{auth, channels, dms, error, id, invites, members, messages, reads, roles, servers, uploads, users, voice};
+use crate::{
+    auth, channels, dms, embeds, error, id, invites, members, messages, reads, roles, servers, uploads, users, voice,
+};
 
 #[derive(OpenApi)]
 #[openapi(
@@ -28,7 +30,7 @@ use crate::{auth, channels, dms, error, id, invites, members, messages, reads, r
         roles::handlers::list, roles::handlers::create, roles::handlers::update, roles::handlers::delete,
         channels::handlers::list, channels::handlers::create, channels::handlers::reorder, channels::handlers::update, channels::handlers::delete,
         channels::handlers::put_overwrite, channels::handlers::delete_overwrite,
-        messages::handlers::list, messages::handlers::create, messages::handlers::edit, messages::handlers::delete,
+        messages::handlers::list, messages::handlers::create, messages::handlers::edit, messages::handlers::delete, embeds::remove,
         messages::handlers::typing, messages::reactions::add, messages::reactions::remove,
         messages::search::in_server, messages::search::in_channel,
         uploads::handlers::attachment, uploads::handlers::image,

@@ -6,7 +6,8 @@ export type Block = { kind: 'text'; inlines: Inline[] } | { kind: 'codeblock'; l
 
 const FENCE = /```(?:([\w#+.-]+)?\n)?([\s\S]*?)```/g
 const INLINE_CODE = /`([^`\n]+)`/g
-const URL = /(https?:\/\/[^\s<]+[^\s<.,:;"')\]])/g
+// `<https://...>` asks for no link preview; the brackets are dropped from the text (only the URL is captured).
+const URL = /<?(https?:\/\/[^\s<>]+[^\s<>.,:;"')\]])>?/g
 
 function linkify(text: string): Inline[] {
   return text

@@ -100,6 +100,23 @@ export interface paths {
         patch: operations["messages_edit"];
         trace?: never;
     };
+    "/api/channels/{cid}/messages/{mid}/embeds": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        /** Removes the link previews from a message for good (author or Manage Messages). */
+        delete: operations["messages_remove_embeds"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/channels/{cid}/messages/{mid}/reactions/{emoji}": {
         parameters: {
             query?: never;
@@ -799,6 +816,22 @@ export interface components {
         EditMessage: {
             content: string;
         };
+        Embed: {
+            description?: string | null;
+            image?: null | components["schemas"]["EmbedImage"];
+            site_name?: string | null;
+            title?: string | null;
+            /** @description The link the preview is for. */
+            url: string;
+        };
+        EmbedImage: {
+            /** Format: int32 */
+            height?: number | null;
+            /** @description Served by Glacier under /files, never the original host. */
+            url: string;
+            /** Format: int32 */
+            width?: number | null;
+        };
         /** @description Error response body, documented for OpenAPI. */
         ErrorBody: {
             error: components["schemas"]["ErrorDetail"];
@@ -863,6 +896,8 @@ export interface components {
             created_at: string;
             /** Format: date-time */
             edited_at: string | null;
+            /** @description Link previews, added a moment after the message by `MESSAGE_UPDATE`. */
+            embeds: components["schemas"]["Embed"][];
             id: components["schemas"]["Id"];
             reactions: components["schemas"]["Reaction"][];
             referenced_message: null | components["schemas"]["ReferencedMessage"];
@@ -1253,6 +1288,26 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["Message"];
                 };
+            };
+        };
+    };
+    messages_remove_embeds: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                cid: components["schemas"]["Id"];
+                mid: components["schemas"]["Id"];
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
             };
         };
     };

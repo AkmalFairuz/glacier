@@ -44,6 +44,8 @@ pub struct Message {
     pub referenced_message: Option<ReferencedMessage>,
     pub attachments: Vec<Attachment>,
     pub reactions: Vec<Reaction>,
+    /// Link previews, added a moment after the message by `MESSAGE_UPDATE`.
+    pub embeds: Vec<crate::embeds::Embed>,
     pub edited_at: Option<DateTime<Utc>>,
     pub created_at: DateTime<Utc>,
 }

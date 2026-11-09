@@ -9,6 +9,8 @@ import { useMenu } from '../../ui/useMenu'
 import { messagesApi } from './api'
 import { deleteMessage } from './cache'
 import { AttachmentPreview } from './AttachmentPreview'
+import { EmbedCard } from './EmbedCard'
+import { useSettings } from '../settings/settingsStore'
 import { EmojiPicker } from '../emoji/EmojiPicker'
 import { MessageContent } from './MessageContent'
 import { search, useSearch } from '../search/searchStore'
@@ -38,6 +40,7 @@ export function MessageItem({ message, meId, perms, compact }: Props) {
     const timer = window.setTimeout(search.clearHighlight, 2400)
     return () => window.clearTimeout(timer)
   }, [highlighted])
+  const linkPreviews = useSettings((st) => st.linkPreviews)
   const isMine = message.author.id === meId
   const remove = useMutation({
     mutationFn: () => messagesApi.remove(message.channel_id, message.id),
@@ -65,6 +68,14 @@ export function MessageItem({ message, meId, perms, compact }: Props) {
           ))}
         </div>
       )}
+      {linkPreviews &&
+        message.embeds.map((embed) => (
+          <EmbedCard
+            key={embed.url}
+            embed={embed}
+            onRemove={isMine || perms.canManage ? () => void messagesApi.removeEmbeds(message.channel_id, message.id) : undefined}
+          />
+        ))}
       <ReactionBar reactions={message.reactions} meId={meId} canReact={perms.canReact} onToggle={toggleReaction} />
       <div className={s.actions} role="toolbar" aria-label="Message actions">
         {perms.canReact && <IconButton size="sm" label="Add reaction" icon={<LuSmilePlus />} onClick={picker.openBelow} />}

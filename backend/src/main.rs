@@ -4,6 +4,7 @@ mod channels;
 mod config;
 mod db;
 mod dms;
+mod embeds;
 mod error;
 mod gateway;
 mod id;

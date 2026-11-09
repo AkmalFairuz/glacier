@@ -75,6 +75,8 @@ pub async fn hydrate(state: &AppState, pool: &MySqlPool, rows: Vec<MessageRow>) 
         }
     }
 
+    let mut embeds = crate::embeds::for_messages(pool, &ids).await?;
+
     Ok(rows
         .into_iter()
         .filter_map(|r| {
@@ -93,6 +95,7 @@ pub async fn hydrate(state: &AppState, pool: &MySqlPool, rows: Vec<MessageRow>) 
                 referenced_message,
                 attachments: attachments.remove(&r.id).unwrap_or_default(),
                 reactions: reactions.remove(&r.id).unwrap_or_default(),
+                embeds: embeds.remove(&r.id).unwrap_or_default(),
                 id: r.id,
                 channel_id: r.channel_id,
                 content: r.content,

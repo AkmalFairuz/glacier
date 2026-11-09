@@ -1,5 +1,5 @@
 pub mod handlers;
-mod storage;
+pub mod storage;
 
 use axum::extract::DefaultBodyLimit;
 use axum::routing::post;

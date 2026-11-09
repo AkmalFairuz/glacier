@@ -7,6 +7,7 @@ required:
 - content
 - created_at
 - edited_at
+- embeds
 - id
 - reactions
 - referenced_message
@@ -30,6 +31,11 @@ properties:
     - string
     - 'null'
     format: date-time
+  embeds:
+    type: array
+    items:
+      $ref: ./Embed.yaml
+    description: Link previews, added a moment after the message by `MESSAGE_UPDATE`.
   id:
     $ref: ./Id.yaml
   reactions:

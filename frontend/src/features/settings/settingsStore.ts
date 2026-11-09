@@ -23,6 +23,8 @@ export type Settings = {
   clock: Clock
   motion: Motion
   underlineLinks: boolean
+  /** Show Open Graph cards under messages with links. */
+  linkPreviews: boolean
 
   inputDeviceId: string
   outputDeviceId: string
@@ -68,6 +70,7 @@ export const DEFAULT_SETTINGS: Settings = {
   clock: 'auto',
   motion: 'system',
   underlineLinks: false,
+  linkPreviews: true,
 
   inputDeviceId: 'default',
   outputDeviceId: 'default',

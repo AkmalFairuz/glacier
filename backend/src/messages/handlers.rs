@@ -84,6 +84,7 @@ pub async fn create(
     .await?;
     let message = repo::get(&state, id, message_id).await?;
     gateway::publish(&state, access.target(), Event::new("MESSAGE_CREATE", &message)).await;
+    crate::embeds::refresh(state.clone(), access.target(), id, message_id, content.clone());
     crate::reads::mark_read(&state, auth.id, id, access.channel.server_id, message_id).await?;
     Ok((StatusCode::CREATED, Json(message)))
 }
@@ -107,6 +108,7 @@ pub async fn edit(
     repo::edit(&state, mid, &content).await?;
     let message = repo::get(&state, cid, mid).await?;
     gateway::publish(&state, access.target(), Event::new("MESSAGE_UPDATE", &message)).await;
+    crate::embeds::refresh(state.clone(), access.target(), cid, mid, content);
     Ok(Json(message))
 }
 

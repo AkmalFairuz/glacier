@@ -1,0 +1,24 @@
+# Generated from the backend handlers (utoipa). Do not edit; run `cargo run -- openapi` in backend/.
+type: object
+required:
+- url
+properties:
+  description:
+    type:
+    - string
+    - 'null'
+  image:
+    oneOf:
+    - type: 'null'
+    - $ref: ./EmbedImage.yaml
+  site_name:
+    type:
+    - string
+    - 'null'
+  title:
+    type:
+    - string
+    - 'null'
+  url:
+    type: string
+    description: The link the preview is for.
