@@ -5,8 +5,8 @@
 <h1 align="center"><b>Glacier</b></h1>
 
 <p align="center">
-  A self-hosted chat app with servers, text channels, voice/video channels with
-  screen sharing, direct messages (with calls), and roles and permissions.
+  A self-hosted chat app inspired by Discord, with servers, text channels, voice/video
+  channels with screen sharing, direct messages (with calls), and roles and permissions.
 </p>
 
 <p align="center">
