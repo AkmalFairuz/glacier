@@ -9,6 +9,8 @@
   screen sharing, direct messages (with calls), and roles and permissions.
 </p>
 
+![Glacier: a server's #general channel with the channel list and member list](docs/screenshot.webp)
+
 - **Backend**: Rust (axum, sqlx with raw SQL, no ORM), MariaDB primary + read replica, Redis, MinIO
 - **Frontend**: Vite + React + TypeScript
 - **Realtime**: WebSocket gateway; events fan out across backend replicas through Redis pub/sub
@@ -87,6 +89,7 @@ Format with `cargo fmt` and `npm run format`.
 
 ```
 backend/    Rust crate: one module per feature (handlers.rs, repo.rs with raw SQL, models.rs)
+docs/       README screenshot
 frontend/   React app: src/ui (primitives), src/features/* (feature components and hooks)
 nginx/      Reverse proxy config (baked into the frontend image)
 openapi/    Generated OpenAPI spec (YAML, split per path and schema)
