@@ -4,6 +4,7 @@ import '@fontsource/roboto/700.css'
 // Roboto Mono is used only for code in messages.
 import '@fontsource/roboto-mono/400.css'
 import './styles/tokens.css'
+import './styles/themes.css'
 import './styles/reset.css'
 import './styles/global.css'
 import { StrictMode } from 'react'

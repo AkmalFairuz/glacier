@@ -1,6 +1,13 @@
 import { useEffect } from 'react'
 import { useShallow } from 'zustand/react/shallow'
-import { useSettings } from './settingsStore'
+import { useSettings, type Theme } from './settingsStore'
+
+/** Sets the theme on <html>; `system` removes it so color-scheme follows the OS. */
+export function applyTheme(theme: Theme) {
+  const root = document.documentElement
+  if (theme === 'system') delete root.dataset.theme
+  else root.dataset.theme = theme
+}
 
 /** Reflects Appearance and Accessibility settings onto <html>, where CSS picks them up. */
 export function useApplyAppearance() {
@@ -9,8 +16,7 @@ export function useApplyAppearance() {
   )
   useEffect(() => {
     const root = document.documentElement
-    if (a.theme === 'system') delete root.dataset.theme
-    else root.dataset.theme = a.theme
+    applyTheme(a.theme)
     root.dataset.density = a.density
     root.dataset.motion = a.motion
     root.dataset.underlineLinks = String(a.underlineLinks)

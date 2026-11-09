@@ -21,7 +21,7 @@
 }
 
 .trigger:hover:not(:disabled) {
-  border-color: var(--gray-300);
+  border-color: var(--border-hover);
 }
 
 .trigger:focus-visible,

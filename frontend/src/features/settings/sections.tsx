@@ -28,7 +28,12 @@ export const SETTINGS_GROUPS: NavGroup[] = [
   {
     label: 'App settings',
     items: [
-      { id: 'appearance', label: 'Appearance', icon: <LuPalette />, keywords: 'theme dark light compact cozy font size time clock' },
+      {
+        id: 'appearance',
+        label: 'Appearance',
+        icon: <LuPalette />,
+        keywords: 'theme color dark light midnight aurora ember sandstone lichen heather compact cozy font size time clock',
+      },
       { id: 'accessibility', label: 'Accessibility', icon: <LuAccessibility />, keywords: 'motion animation underline links' },
       {
         id: 'voice-video',

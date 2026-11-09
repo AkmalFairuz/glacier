@@ -62,7 +62,15 @@
   --gray-900: #192127;
   --gray-925: #131a1f;
   --gray-950: #0d1317;
+}
 
+/*
+  Semantic colors for the default themes. Re-declared on [data-theme] elements so a light or dark
+  preview tile shows the defaults even when <html> uses another theme (see themes.css).
+*/
+:root,
+[data-theme='light'],
+[data-theme='dark'] {
   --bg-rail: light-dark(var(--gray-100), var(--gray-950));
   --bg-sidebar: light-dark(var(--gray-50), var(--gray-925));
   --bg-main: light-dark(var(--gray-0), var(--gray-900));
@@ -75,6 +83,9 @@
   --text: light-dark(#141b20, #e4eaee);
   --text-muted: light-dark(var(--gray-600), #a6b2bc);
   --text-faint: light-dark(var(--gray-500), #87949f);
+  --border-hover: light-dark(var(--gray-300), #4f5c67);
+  --tooltip-bg: light-dark(var(--gray-900), var(--gray-50));
+  --tooltip-fg: light-dark(var(--gray-50), var(--gray-900));
 
   /* Meltwater blue: the one accent. */
   --accent: light-dark(#2c6a8c, #93c2dc);
@@ -109,10 +120,10 @@
   --shadow-pop: 0 1px 2px var(--shadow-near), 0 4px 12px var(--shadow-far);
 }
 
-:root[data-theme='light'] {
+[data-theme='light'] {
   color-scheme: light;
 }
 
-:root[data-theme='dark'] {
+[data-theme='dark'] {
   color-scheme: dark;
 }

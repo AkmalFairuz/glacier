@@ -1,7 +1,8 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
+import { isTheme, type Theme } from './themes'
 
-export type Theme = 'system' | 'light' | 'dark'
+export type { Theme }
 /** `system` follows the OS reduced-motion preference; `full` animates even when the OS asks to reduce. */
 export type Motion = 'system' | 'reduce' | 'full'
 export type Density = 'cozy' | 'compact'
@@ -139,7 +140,12 @@ export const useSettings = create<Settings>()(
       delete s.reduceMotion
       return s as Settings
     },
-    merge: (persisted, current) => ({ ...current, ...(persisted as Partial<Settings>) }),
+    merge: (persisted, current) => {
+      const merged = { ...current, ...(persisted as Partial<Settings>) }
+      // A theme removed in a later version falls back to the OS setting.
+      if (!isTheme(merged.theme)) merged.theme = 'system'
+      return merged
+    },
   }),
 )
 

@@ -4,6 +4,7 @@ import { Segmented } from '../../../ui/Segmented'
 import { SettingsSection } from '../../../ui/SettingsSection'
 import { Slider } from '../../../ui/Slider'
 import { MessagePreview } from './MessagePreview'
+import { ThemePicker } from '../ThemePicker'
 import { settings, useSettings } from '../settingsStore'
 
 export function AppearancePage() {
@@ -12,16 +13,7 @@ export function AppearancePage() {
   return (
     <>
       <SettingsSection title="Theme">
-        <Segmented
-          label="Color theme"
-          value={s.theme}
-          onChange={(theme) => settings.set({ theme })}
-          options={[
-            { value: 'system', label: 'System' },
-            { value: 'light', label: 'Light' },
-            { value: 'dark', label: 'Dark' },
-          ]}
-        />
+        <ThemePicker />
       </SettingsSection>
       <SettingsSection title="Messages">
         <MessagePreview name={me?.display_name ?? 'You'} avatarUrl={me?.avatar_url ?? null} />

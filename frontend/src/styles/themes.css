@@ -1,0 +1,203 @@
+/*
+  Extra color themes. Each is a full palette on a fixed light or dark base: it overrides the
+  semantic tokens from tokens.css, and color-scheme resolves the rest (danger, online, overlay,
+  shadows, avatar tones). Attribute selectors, not :root, so the same rules style the preview
+  tiles in Settings › Appearance. `--button-blue` is the primary button color; it follows the accent.
+*/
+/* Midnight: Near-black for OLED screens; meltwater accent. */
+[data-theme='midnight'] {
+  color-scheme: dark;
+  --bg-rail: #000000;
+  --bg-sidebar: #07090c;
+  --bg-main: #0b0e12;
+  --bg-elevated: #14181e;
+  --bg-sunken: #07090c;
+  --bg-hover: #161b21;
+  --bg-active: #1f262e;
+  --border: #1a1f26;
+  --border-strong: #2a323c;
+  --border-hover: #3d4753;
+  --text: #e6eaef;
+  --text-muted: #a3adb8;
+  --text-faint: #848f9b;
+  --accent: #93c2dc;
+  --accent-hover: #acd2e6;
+  --accent-fg: #0b0e12;
+  --accent-subtle: #13263a;
+  --button-blue: #2c6a8c;
+  --button-blue-hover: #245a78;
+  --switch-off: #2a323c;
+  --switch-thumb-off: #8f9aa5;
+  --tooltip-bg: #e6eaef;
+  --tooltip-fg: #0b0e12;
+  --strata-1: #0a0e13;
+  --strata-2: #0e1820;
+  --strata-3: #12222e;
+  --strata-4: #1a3346;
+  --strata-5: #26506b;
+}
+
+/* Aurora: Deep polar-night green with a northern-lights accent. */
+[data-theme='aurora'] {
+  color-scheme: dark;
+  --bg-rail: #08171a;
+  --bg-sidebar: #0c1e21;
+  --bg-main: #11262a;
+  --bg-elevated: #173136;
+  --bg-sunken: #0c1e21;
+  --bg-hover: #1a3338;
+  --bg-active: #224046;
+  --border: #1c353a;
+  --border-strong: #2b4b51;
+  --border-hover: #3c6067;
+  --text: #e2efec;
+  --text-muted: #a2bfb8;
+  --text-faint: #84a39c;
+  --accent: #6fd3b0;
+  --accent-hover: #8fe0c3;
+  --accent-fg: #08171a;
+  --accent-subtle: #173f37;
+  --button-blue: #23705a;
+  --button-blue-hover: #1c5d4a;
+  --switch-off: #2b4b51;
+  --switch-thumb-off: #93aea8;
+  --tooltip-bg: #e2efec;
+  --tooltip-fg: #08171a;
+  --strata-1: #0f2125;
+  --strata-2: #122c2d;
+  --strata-3: #163a36;
+  --strata-4: #1c4b42;
+  --strata-5: #24604f;
+}
+
+/* Ember: Warm basalt charcoal with an amber accent. */
+[data-theme='ember'] {
+  color-scheme: dark;
+  --bg-rail: #121010;
+  --bg-sidebar: #181514;
+  --bg-main: #1e1a18;
+  --bg-elevated: #27221f;
+  --bg-sunken: #181514;
+  --bg-hover: #2a2420;
+  --bg-active: #352e29;
+  --border: #2d2723;
+  --border-strong: #40372f;
+  --border-hover: #574b41;
+  --text: #f0e8e2;
+  --text-muted: #c0b2a7;
+  --text-faint: #9e9084;
+  --accent: #e3a35c;
+  --accent-hover: #ecb87c;
+  --accent-fg: #121010;
+  --accent-subtle: #3b2a19;
+  --button-blue: #9a5a1c;
+  --button-blue-hover: #824b16;
+  --switch-off: #40372f;
+  --switch-thumb-off: #a89a8e;
+  --tooltip-bg: #f0e8e2;
+  --tooltip-fg: #121010;
+  --strata-1: #1c1816;
+  --strata-2: #241d18;
+  --strata-3: #2f231a;
+  --strata-4: #42301d;
+  --strata-5: #5a3f20;
+}
+
+/* Sandstone: Warm stone with a deep teal accent. */
+[data-theme='sandstone'] {
+  color-scheme: light;
+  --bg-rail: #ece5dc;
+  --bg-sidebar: #f5f0ea;
+  --bg-main: #fffdfa;
+  --bg-elevated: #ffffff;
+  --bg-sunken: #f5f0ea;
+  --bg-hover: #eee6dc;
+  --bg-active: #e4d9cc;
+  --border: #e5dccf;
+  --border-strong: #d6c9b8;
+  --border-hover: #bfb09c;
+  --text: #231c15;
+  --text-muted: #5f5145;
+  --text-faint: #756759;
+  --accent: #1d6a6a;
+  --accent-hover: #175858;
+  --accent-fg: #ffffff;
+  --accent-subtle: #dcefed;
+  --button-blue: #1d6a6a;
+  --button-blue-hover: #175858;
+  --switch-off: #cfc2b1;
+  --switch-thumb-off: #ffffff;
+  --tooltip-bg: #2b231b;
+  --tooltip-fg: #f5f0ea;
+  --strata-1: #ebe2d6;
+  --strata-2: #d9cdbb;
+  --strata-3: #b9b39c;
+  --strata-4: #6f8e84;
+  --strata-5: #1d6a6a;
+}
+
+/* Lichen: Soft sage with a moss-green accent. */
+[data-theme='lichen'] {
+  color-scheme: light;
+  --bg-rail: #e3e9e0;
+  --bg-sidebar: #f0f4ee;
+  --bg-main: #fbfdfa;
+  --bg-elevated: #ffffff;
+  --bg-sunken: #f0f4ee;
+  --bg-hover: #e5ece2;
+  --bg-active: #d8e2d4;
+  --border: #dbe3d7;
+  --border-strong: #c6d1c1;
+  --border-hover: #aebba8;
+  --text: #18201a;
+  --text-muted: #4d5b4f;
+  --text-faint: #627166;
+  --accent: #3d6b45;
+  --accent-hover: #325a39;
+  --accent-fg: #ffffff;
+  --accent-subtle: #e0ede0;
+  --button-blue: #3d6b45;
+  --button-blue-hover: #325a39;
+  --switch-off: #c3cebe;
+  --switch-thumb-off: #ffffff;
+  --tooltip-bg: #1d261f;
+  --tooltip-fg: #f0f4ee;
+  --strata-1: #e1e9dd;
+  --strata-2: #c9d8c4;
+  --strata-3: #a6c0a2;
+  --strata-4: #6f9473;
+  --strata-5: #3d6b45;
+}
+
+/* Heather: Lilac grey with a plum accent. */
+[data-theme='heather'] {
+  color-scheme: light;
+  --bg-rail: #ebe5ef;
+  --bg-sidebar: #f5f1f7;
+  --bg-main: #fdfbfe;
+  --bg-elevated: #ffffff;
+  --bg-sunken: #f5f1f7;
+  --bg-hover: #eee7f2;
+  --bg-active: #e2d8e9;
+  --border: #e4dcea;
+  --border-strong: #d2c6db;
+  --border-hover: #bcaec8;
+  --text: #1f1824;
+  --text-muted: #5a4e63;
+  --text-faint: #73677c;
+  --accent: #6e4a85;
+  --accent-hover: #5c3d70;
+  --accent-fg: #ffffff;
+  --accent-subtle: #ede2f4;
+  --button-blue: #6e4a85;
+  --button-blue-hover: #5c3d70;
+  --switch-off: #d0c4d9;
+  --switch-thumb-off: #ffffff;
+  --tooltip-bg: #241c2a;
+  --tooltip-fg: #f5f1f7;
+  --strata-1: #ebe3f0;
+  --strata-2: #dacde4;
+  --strata-3: #bfa9cf;
+  --strata-4: #9478ab;
+  --strata-5: #6e4a85;
+}

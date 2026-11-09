@@ -21,7 +21,7 @@
 }
 
 .capture:hover {
-  border-color: var(--gray-300);
+  border-color: var(--border-hover);
 }
 
 .recording {
