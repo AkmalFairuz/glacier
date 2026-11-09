@@ -32,14 +32,15 @@ docker compose up --build
 
 Open http://localhost:8080 and register an account.
 
-| Service           | Purpose                                                        |
-| ----------------- | -------------------------------------------------------------- |
-| `nginx`           | Serves the built frontend; proxies `/api`, `/gateway`, `/files` |
-| `backend` (×3)    | Stateless API + gateway replicas                               |
-| `mariadb-primary` | Writes, binlog source                                          |
-| `mariadb-replica` | Read-only replica used for listing queries                     |
-| `redis`           | Sessions, cache, rate limits, presence, voice state, pub/sub   |
-| `minio`           | Uploaded files (bucket `glacier-uploads`, public read)         |
+| Service                            | Purpose                                                         |
+| ---------------------------------- | --------------------------------------------------------------- |
+| `nginx`                            | Serves the built frontend; proxies `/api`, `/gateway`, `/files` |
+| `backend` (×3)                     | Stateless API + gateway replicas                                |
+| `mariadb-primary`                  | Writes, binlog source                                           |
+| `mariadb-replica`                  | Read-only replica used for listing queries                      |
+| `redis`                            | Sessions, cache, rate limits, presence, voice state, pub/sub    |
+| `minio`                            | Uploaded files (bucket `glacier-uploads`, public read)          |
+| `prometheus`, `grafana`, exporters | Monitoring (see [Monitoring](#monitoring))                      |
 
 Scale the backend: `docker compose up -d --scale backend=5`. nginx re-resolves
 the `backend` service name every 10 seconds, so it picks up new replicas.
@@ -65,6 +66,38 @@ The files are generated, so don't edit them by hand. After changing the API:
 cd backend && cargo run -q -- openapi      # rewrites ../openapi/
 cd ../frontend && npm run gen:api          # TypeScript types from openapi/openapi.yaml
 ```
+
+## Monitoring
+
+Grafana runs at http://localhost:3001 (user `admin`, password `glacier-grafana`) with three
+dashboards in the Glacier folder:
+
+- **Backend**: requests per second, error rate and p95 latency per route, gateway connections
+  and events, rate limiting, database pool usage, and CPU and memory per replica
+- **Data services**: MariaDB queries, connections and replication lag, Redis commands, memory and
+  hit ratio, nginx requests and connections, MinIO S3 traffic
+- **Host and containers**: CPU, memory, disk, load and network for the server, and CPU, memory,
+  network and disk writes per Compose service
+
+Grafana is the only monitoring service published to the host. Prometheus and the exporters stay
+on the Compose network:
+
+| Service                                              | Scrapes                                              |
+| ---------------------------------------------------- | ---------------------------------------------------- |
+| `prometheus`                                         | Everything below, every 15 seconds (15 days kept)    |
+| `backend` (built in)                                 | `/metrics` on each replica, found through Docker DNS |
+| `mysqld-exporter-primary`, `mysqld-exporter-replica` | MariaDB, including replication status                |
+| `redis-exporter`                                     | Redis                                                |
+| `nginx-exporter`                                     | nginx `stub_status` on internal port 8081            |
+| `minio` (built in)                                   | `/minio/v2/metrics/cluster`                          |
+| `node-exporter`                                      | Host CPU, memory, disk, network, load                |
+| `cadvisor`                                           | Per-container CPU, memory, network, disk I/O         |
+
+Alert rules (in `monitoring/prometheus/rules/`) cover down targets, high 5xx rate, slow requests,
+database pool saturation, stopped or lagging replication, low memory, a full disk, and containers
+killed for running out of memory. Grafana lists them under Alerting, Alert rules.
+
+On Docker Desktop and OrbStack, node-exporter reports the Docker VM rather than your computer.
 
 ## Local development
 
@@ -99,6 +132,7 @@ Format with `cargo fmt` and `npm run format`.
 backend/    Rust crate: one module per feature (handlers.rs, repo.rs with raw SQL, models.rs)
 docs/       README screenshot and architecture diagram
 frontend/   React app: src/ui (primitives), src/features/* (feature components and hooks)
+monitoring/ Prometheus config and alert rules, Grafana provisioning and dashboards
 nginx/      Reverse proxy config (baked into the frontend image)
 openapi/    Generated OpenAPI spec (YAML, split per path and schema)
 ```

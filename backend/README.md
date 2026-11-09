@@ -42,7 +42,8 @@ All settings come from environment variables. The defaults match `docker-compose
 
 Each replica serves Prometheus metrics at `GET /metrics` (port 3000). nginx doesn't proxy this
 path, so it's reachable only inside the Docker network (`http://backend:3000/metrics`), not from
-the host. To scrape every replica, let Prometheus resolve the service name:
+the host. Docker Compose already runs Prometheus and Grafana for it (see Monitoring in the root
+README). To scrape every replica from your own Prometheus, let it resolve the service name:
 
 ```yaml
 scrape_configs:
